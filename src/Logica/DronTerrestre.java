@@ -13,7 +13,7 @@ public class DronTerrestre extends Dron {
 	
 	public DronTerrestre(int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vBlindajeActivo)
 	{
-		super();
+		super(vVelocidad,vCamara,vCanon,vVision);
 		this.BlindajeActivo=vBlindajeActivo;
 	}
 	

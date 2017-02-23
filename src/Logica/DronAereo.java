@@ -15,7 +15,7 @@ public class DronAereo extends Dron {
 	
 	public DronAereo (int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vMotoresActivos,boolean vTieneBomba,boolean vBombaRota)
 	{
-		super();
+		super(vVelocidad,vCamara,vCanon,vVision);
 		this.MotoresActivos=vMotoresActivos;
 		this.TieneBomba=vTieneBomba;
 		this.BombaRota=vBombaRota;

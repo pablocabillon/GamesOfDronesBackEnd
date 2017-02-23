@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import Persistencia.Consultas;
 
-//import server.Reporter;
+
 
 /*********************************************
  * Descripción: 	Clase que devuelve datos de Jugadores en la base

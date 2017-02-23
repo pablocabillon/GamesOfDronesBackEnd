@@ -6,7 +6,7 @@ package Logica;
  * Versión: 		1.0.0
  * Modificaciones: 
  **********************************************/
-public class Dron {
+public abstract class Dron {
 
 	
 	private int Velocidad;
@@ -14,11 +14,7 @@ public class Dron {
 	private boolean Canon;
 	private int Vision;
 	
-	public Dron()
-	{
-		super();
-	}
-	
+
 	public Dron(int vVelocidad,boolean vCamara,boolean vCanon,int vVision)
 	{
 		this.Velocidad=vVelocidad;

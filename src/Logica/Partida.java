@@ -12,13 +12,17 @@ public class Partida {
 	private Equipos Equipos;
 	private Escenario Escenario;
 	private Objetos Objetos;
+	private int CantJugadores;
 
-	public Partida()
+	public Partida(Equipos vEquipos,Escenario vEscenario,Objetos vObjetos,int vCantJugadores)
 	{
-		super();
+		this.Equipos=vEquipos;
+		this.Escenario=vEscenario;
+		this.Objetos=vObjetos;
+		this.CantJugadores=vCantJugadores;
 	}
 	
-	public void IniciarPartida(int vIdPartida)
+	public void IniciarPartida(int vIdPartida,int vCantJugadores)
 	{
 		
 	}
