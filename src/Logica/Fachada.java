@@ -1,4 +1,6 @@
-import java.util.Hashtable;
+package Logica;
+
+
 
 /*********************************************
  * Descripción: 	Facha de acceso a la CapaLogica que contiene los funciones generales
@@ -12,7 +14,6 @@ public class Fachada {
 	private Partida partida;
 
 	
-	 
 	public void crearPartida(int cantJugadores,Escenario vEscenario)
 	{
 			
