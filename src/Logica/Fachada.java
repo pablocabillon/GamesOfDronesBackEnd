@@ -16,7 +16,7 @@ public class Fachada {
 	
 	public void crearPartida(int cantJugadores,Escenario vEscenario)
 	{
-			
+		partida = null;	
 	}
 	
 	
