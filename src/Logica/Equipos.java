@@ -10,7 +10,7 @@ import java.util.Hashtable;
  **********************************************/
 public class Equipos {
 
-	private Hashtable<Integer,Objeto> Equipos;
+	private Hashtable<Integer,Equipo> Equipos;
 	
 	public Equipos()
 	{
@@ -22,12 +22,12 @@ public class Equipos {
 		return Equipos.containsKey(vClave);
 	}
 	
-	public void insert (Integer vClave,Objeto vObject)
+	public void insert (Integer vClave,Equipo vObject)
 	{
 		Equipos.put(vClave,vObject);
 	}
 	
-	public Objeto Find (Integer vClave)
+	public Equipo Find (Integer vClave)
 	{
 		return Equipos.get(vClave);
 	}

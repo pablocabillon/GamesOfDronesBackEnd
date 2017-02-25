@@ -11,104 +11,123 @@ public class Consultas {
 	
 	
 	public String InsertarJugador(){
-		return "INSERT INTO JUGADORES (IdJugador,NombreJugador,IdDron) VALUES(?,?,?)";
+		return "INSERT INTO JUGADOR (IdJugador,IdEquipo,IdPartida,NombreJugador) VALUES(?,?,?)";
 	}
 
 	public String ExisteJugador(){
-		return "SELECT * FROM JUGADORES WHERE IdJugador= ?";
+		return "SELECT * FROM JUGADOR WHERE IdJugador= ? AND IdEquipo=? AND IdPartida=?";
 	}
 	
 	public String EliminarJugador(){
-		return "DELETE FROM JUGADORES WHERE IdJugador= ?";
+		return "DELETE FROM JUGADOR WHERE IdJugador= ? AND IdEquipo=? AND IdPartida=?";
+	}
+	
+	public String BuscarJugador(){
+		return "SELECT JU.NombreJugador,DR.Camara,DR.Cañon,DR.Vision,AE.MotoresActivos,AE.TieneBomba,TE.BlindajeActivo FROM JUGADOR AS JU INNER JOIN DRON AS DR ON JU.IdJugador=DR.IdJugador"
+				+ " AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto AND OB.IdObjeto=DR.IdObjeto INNER JOIN TERRESTRE AS TE"
+				+ "LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN"
+				+ "AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador"
+				+ "WHERE JU.IdJugador= ? AND JU.IdEquipo=? AND JU.IdPartida=?";
 	}
 
 	public String InsertarPartida(){
 		
-		return "INSERT INTO PARTIDAS (IdPartida,IdEscenario,IdEquipo1,IdEquipo2) VALUES(?,?,?,?)";
+		return "INSERT INTO PARTIDA (IdPartida,FechaHora,CantJugadores) VALUES(?,?,?)";
 	   
+	}
+	
+	public String BuscarJugadorEquipo(){
+		return "SELECT * FROM JUGADOR WHERE IdEquipo= ? AND IdPartida= ?";
 	}
 	
 	public String ExistePartida(){
 		
-			return "SELECT * FROM PARTIDAS WHERE IdPartida=?";
+			return "SELECT * FROM PARTIDA WHERE IdPartida=?";
 		
 	}
 	
 	public String EliminarPartida(){
 		
-		return "DELETE FROM PARTIDAS WHERE IdPartida=?";
+		return "DELETE FROM PARTIDA WHERE IdPartida=?";
 		
 	}
 	
 	public String InsertarEquipo(){
-		return "INSERT INTO EQUIPOS (IdEquipo,NombreEquipo,IdJugador1,IdJugador2) VALUES(?,?,?,?)";
+		return "INSERT INTO EQUIPO (IdEquipo,IdPartida,NombreEquipo) VALUES(?,?,?)";
 	}
 
 	public String ExisteEquipo(){
-		return "SELECT * FROM EQUIPOS WHERE IdEquipo= ?";
+		return "SELECT * FROM EQUIPO WHERE IdEquipo= ? AND IdPartida=?";
 	}
 	
 	public String EliminarEquipo(){
-		return "DELETE FROM EQUIPOS WHERE IdEquipo= ?";
+		return "DELETE FROM EQUIPOS WHERE IdEquipo= ? AND IdPartida=?";
 	}
 	
+	public String BuscarEquiposPartida(){
+		return "SELECT * FROM EQUIPO WHERE IdPartida= ?";
+	}
 	public String InsertarObjeto(){
-		return "INSERT INTO OBJETOS (IdObjeto,CoordX,CoordY,Altura,Ancho) VALUES(?,?,?,?,?,?)";
+		return "INSERT INTO OBJETO (IdObjeto,IdPartida,CoordX,CoordY,Rotacion,Angulo,Altura,Ancho) VALUES(?,?,?,?,?,?,?,?)";
 	}
 
 	public String ExisteObjeto(){
-		return "SELECT * FROM OBJETOS WHERE IdObjeto= ?";
+		return "SELECT * FROM OBJETO WHERE IdObjeto= ? AND IdPartida= ?";
+	}
+	
+	public String BuscarObjetosPartida(){
+		return "SELECT * FROM OBJETO WHERE IdPartida= ?";
 	}
 	
 	public String EliminarObjeto(){
-		return "DELETE FROM OBJETOS WHERE IdObjeto= ?";
+		return "DELETE FROM OBJETO WHERE IdObjeto= ? AND IdPartida= ?";
 	}
 	
 	public String InsertarDron(){
-		return "INSERT INTO DRONES (IdDron,IdObjeto,Camara,Cañon,Vision,Velocidad) VALUES(?,?,?,?,?,?)";
+		return "INSERT INTO DRON (IdObjeto,IdPartida,IdJugador,Camara,Cañon,Vision,Velocidad) VALUES(?,?,?,?,?,?,?)";
 	}
 
 	public String ExisteDron(){
-		return "SELECT * FROM DRONES WHERE IdDron= ?";
+		return "SELECT * FROM DRON WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
 	public String EliminarDron(){
-		return "DELETE FROM DRONES WHERE IdDron= ?";
+		return "DELETE FROM DRONES WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
 	public String InsertarBase(){
-		return "INSERT INTO BASES (IdObjeto,VidaPolvorin,VidaZonaDespegue) VALUES(?,?,?)";
+		return "INSERT INTO BASE (IdObjeto,IdPartida,VidaPolvorin,VidaZonaDespegue) VALUES(?,?,?,?)";
 	}
 	
 	public String ExisteBase(){
-		return "SELECT * FROM BASES WHERE IdObjeto= ?";
+		return "SELECT * FROM BASE WHERE IdObjeto= ? AND IdPartida=?";
 	}
 	
 	public String EliminarBase(){
-		return "DELETE FROM BASES WHERE IdObjeto= ?";
+		return "DELETE FROM BASE WHERE IdObjeto= ? AND IdPartida=?";
 	}
 	
 	public String InsertarTerrestre(){
-		return "INSERT INTO TERRESTRES (IdDron,BlindajeActivo) VALUES(?,?)";
+		return "INSERT INTO TERRESTRE (IdObjeto,IdPartida,IdJugador,BlindajeActivo) VALUES(?,?,?,?)";
 	}
 	
 	public String ExisteTerrestre(){
-		return "SELECT * FROM TERRESTRES WHERE IdDron= ?";
+		return "SELECT * FROM TERRESTRE WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
 	public String EliminarTerrestre(){
-		return "DELETE FROM TERRESTRES WHERE IdDron= ?";
+		return "DELETE FROM TERRESTRE WHERE WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
 	public String InsertarAereos(){
-		return "INSERT INTO AEREOS (IdDron,MotorActivo,TieneBomba) VALUES(?,?,?)";
+		return "INSERT INTO AEREO (IdObjeto,IdPartida,IdJugador,MotorActivo,TieneBomba) VALUES(?,?,?,?,?)";
 	}
 	
 	public String ExisteAereo(){
-		return "SELECT * FROM AEREOS WHERE IdDron= ?";
+		return "SELECT * FROM AEREO WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
 	public String EliminarAereo(){
-		return "DELETE FROM AEREOS WHERE IdDron= ?";
+		return "DELETE FROM AEREO WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 }

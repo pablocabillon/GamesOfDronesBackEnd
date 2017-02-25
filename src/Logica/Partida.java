@@ -1,5 +1,6 @@
 package Logica;
 
+import Logica.Escenario.Escenarios;
 
 /*********************************************
  * Descripción: 	Clase que contiene los métodos de la partida
@@ -10,11 +11,11 @@ package Logica;
 public class Partida {
 	
 	private Equipos Equipos;
-	private Escenario Escenario;
+	private Escenarios Escenario;
 	private Objetos Objetos;
 	private int CantJugadores;
 
-	public Partida(Equipos vEquipos,Escenario vEscenario,Objetos vObjetos,int vCantJugadores)
+	public Partida(Equipos vEquipos,Escenarios vEscenario,Objetos vObjetos,int vCantJugadores)
 	{
 		this.Equipos=vEquipos;
 		this.Escenario=vEscenario;
@@ -27,7 +28,7 @@ public class Partida {
 		
 	}
 	
-	public void GuardarPartida(/*llega todod*/)
+	public void GuardarPartida(/*llega todo*/)
 	{
 		
 	}

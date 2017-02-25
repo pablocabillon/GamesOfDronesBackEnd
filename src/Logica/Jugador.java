@@ -12,6 +12,10 @@ public class Jugador {
 	private String  Nombre;
 	private Drones Drones;
 	
+	public Jugador()
+	{
+		
+	}
 	public Jugador(int vIdJugador,String vNombre,Drones vDrones)
 	{
 		this.IdJugador=vIdJugador;

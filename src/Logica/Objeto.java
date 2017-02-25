@@ -13,21 +13,24 @@ public class Objeto {
 	private int CoordenadaY;
 	private int Altura;
 	private int Ancho;
+	private int Rotacion;
+	private int Angulo;
+	private String Tipo;
 	
-	public Objeto()
-	{
-		super();
-	}
-	public Objeto(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho)
+
+	public Objeto(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo)
 	{
 		this.IdObjeto=vIdObjeto;
 		this.CoordenadaX=vCoordenadaX;
 		this.CoordenadaY=vCoordenadaY;
 		this.Altura=vAltura;
 		this.Ancho=vAncho;
+		this.Rotacion=vRotacion;
+		this.Angulo=vAngulo;
+		this.Tipo=vTipo;
 	}
 	
-	public int ObtenerGetId()
+	public int ObtenerIdObjeto()
 	{
 		return IdObjeto;
 	}
@@ -51,7 +54,19 @@ public class Objeto {
 	{
 		return Ancho;
 	}
+	public int ObtenerRotacion()
+	{
+		return Rotacion;
+	}
+	public int ObtenerAngulo()
+	{
+		return Angulo;
+	}
 	
+	public String ObtenerTipo()
+	{
+		return Tipo;
+	}
 	public void SetearCoordenadaX(int vCoordenadaX)
 	{
 		this.CoordenadaX=vCoordenadaX;
@@ -62,6 +77,26 @@ public class Objeto {
 		this.CoordenadaY=vCoordenadaY;
 	}
 	
-
+	public void SetearAltura(int vAltura)
+	{
+		this.Altura=vAltura;
+	}
+	
+	public void SetearAncho(int vAncho)
+	{
+		this.Ancho=vAncho;
+	}
+	public void SetearRotacion(int vRotacion)
+	{
+		this.Rotacion=vRotacion;
+	}
+	public void SetearAngulo(int vAngulo)
+	{
+		this.Angulo=vAngulo;
+	}
+	public void SetearTipo(String vTipo)
+	{
+		this.Tipo=vTipo;
+	}
 
 }

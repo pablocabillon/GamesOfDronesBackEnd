@@ -1,5 +1,7 @@
 package Logica;
 
+import java.util.Random;
+
 /*********************************************
  * Descripción: 	Clase que contiene un enumerado con los escenarios posibles
  * Autor: 			Martín Torres
@@ -13,5 +15,12 @@ public class Escenario {
 	public static final int Escenario3=3;
 	
 	public enum Escenarios{Escenario1,Escenario2,Escenario3};
+	
+	
+	public Escenarios EscenarioAleatorio(){
+		Escenarios[] Escenario = Escenarios.values();
+	    Random generator = new Random();
+	    return Escenario[generator.nextInt(Escenario.length)];
+	    }
 
 }

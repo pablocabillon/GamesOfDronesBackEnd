@@ -11,9 +11,9 @@ public class Base extends Objeto{
 	private int VidaZonaPolvorin;
 	private int VidaZonaDespegue;
 	
-	public Base(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vVidaZonaPolvorin,int vVidaZonaDespegue)
+	public Base(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo,int vVidaZonaPolvorin,int vVidaZonaDespegue)
 	{
-		super();
+		super(vIdObjeto,vCoordenadaX,vCoordenadaY,vAltura,vAncho,vRotacion,vAngulo,vTipo);
 		this.VidaZonaPolvorin=vVidaZonaPolvorin;
 		this.VidaZonaDespegue=vVidaZonaDespegue;
 	}

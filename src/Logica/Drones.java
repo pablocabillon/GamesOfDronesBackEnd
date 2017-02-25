@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class Drones {
 	
-	private Map<Integer,Objeto> Drones;
+	private Map<Integer,Dron> Drones;
 	
 	public Drones() 
 	{
-		Drones = new HashMap<Integer, Objeto>();
+		Drones = new HashMap<Integer, Dron>();
 	}
 	
 	public boolean member(Integer clave)
@@ -24,12 +24,12 @@ public class Drones {
 		return Drones.containsKey(clave);
 	}
 	
-	public void insert(Integer clave, Objeto obj)
+	public void insert(Integer clave, Dron obj)
 	{
 		Drones.put(clave, obj);
 	}
 
-	public Objeto find(int clave)
+	public Dron find(int clave)
 	{
 		return Drones.get(clave);
 	}
