@@ -16,6 +16,7 @@ public class Fachada {
 	
 	public void crearPartida(int cantJugadores,Escenario vEscenario)
 	{
+		//Segunda prueba con el usuario Juan
 		partida = null;	
 	}
 	
