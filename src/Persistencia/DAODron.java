@@ -22,10 +22,10 @@ public class DAODron {
 	
 private String Url, User, Password;
 	
-	public void DAODron(){
-		this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-		this.User = "root";
-		this.Password = "pepito";
+	public DAODron(String url, String user, String password){
+		this.Url = url;
+		this.User = user;
+		this.Password = password;
 	}
 	
 public void InsertarDron(Dron vDron,int vIdObjeto,int vIdPartida,int vIdJugador){ 

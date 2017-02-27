@@ -6,6 +6,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+
 import Logica.Equipos;
 import Logica.Escenario;
 import Logica.Jugadores;
@@ -24,10 +26,10 @@ public class DAOPartida {
 private String Url, User, Password;
 	
 	
-public void DAOPartida(){
-		this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-		this.User = "root";
-		this.Password = "pepito";
+public DAOPartida(String url, String user, String password){
+		this.Url = url;
+		this.User = user;
+		this.Password = password;
 	}
 
 public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores,int vEscenario){
@@ -49,7 +51,7 @@ public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores,int vE
 	} catch (ClassNotFoundException e) {
 		e.getMessage();
 	} catch (SQLException e) {
-
+		System.out.println("Error de SQL");
 	}
 }
 
@@ -73,6 +75,7 @@ public boolean ExistePartida(int vIdPartida){
 		con.close();
 		
 	} catch (SQLException e) {
+		System.out.println("Error de SQL");
 
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();
@@ -88,14 +91,14 @@ public void EliminarPartida(int vIdPartida){
 		String EliminarPartida= consultas.EliminarPartida();
 		PreparedStatement pstmt = con.prepareStatement(EliminarPartida);
 		pstmt.setInt(1, vIdPartida);
-		pstmt.executeQuery();
+		pstmt.executeUpdate();
 		pstmt.close();
 		con.close();
 		
 	} catch (ClassNotFoundException e) {
 		e.getMessage();
 	} catch (SQLException e) {
-
+		System.out.println("Error de SQL");
 	}
 	
 }
@@ -121,8 +124,8 @@ public Partida DevolverPartida(int vIdPartida){
 		
 		if(rs.next())
 		{
-			vEquipos=new DAOEquipo().DevolverEquiposPArtida(vIdPartida);
-			vObjetos=new DAOObjeto().DevolverObjetosPartida(vIdPartida);
+			vEquipos=new DAOEquipo(Url,User,Password).DevolverEquiposPArtida(vIdPartida);
+			vObjetos=new DAOObjeto(Url,User,Password).DevolverObjetosPartida(vIdPartida);
 			vPartida=new Partida(vEquipos, rs.getInt("IdEscenario"), vObjetos, rs.getInt("CantJugadores"));
 			
 		}	

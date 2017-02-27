@@ -25,10 +25,10 @@ public class DAOEquipo {
 	private String Url, User, Password;
 	
 	
-	public void DAOEquipo(){
-			this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-			this.User = "root";
-			this.Password = "pepito";
+	public DAOEquipo(String url, String user, String password){
+			this.Url = url;
+			this.User = user;
+			this.Password = password;
 		}
 	
 	
@@ -48,9 +48,9 @@ public class DAOEquipo {
 			con.close();
 			
 		} catch (ClassNotFoundException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 	}
 	
@@ -75,9 +75,9 @@ public class DAOEquipo {
 			con.close();
 			
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		return existe;
 	}
@@ -92,16 +92,16 @@ public class DAOEquipo {
 		    	
 			pstmt.setInt(1, vIdEquipo);
 			pstmt.setInt(2, vIdPartida);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 			
 			
 			pstmt.close();
 			con.close();
 			
 		} catch (ClassNotFoundException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 		
 	}
@@ -127,7 +127,7 @@ public class DAOEquipo {
 			if(rs.next())
 			{
 				vEquipo=new Equipo(rs.getInt("IdEquipo"),rs.getString("NombreEquipo"), vJugadores);
-				vJugadores=new DAOJugador().DevolverJuadoresEquipo(vIdEquipo,vIdPartida);
+				vJugadores=new DAOJugador(Url,User,Password).DevolverJugadoresEquipo(vIdEquipo,vIdPartida);
 				vEquipo.SetearJugadores(vJugadores);
 			}	
 			rs.close();

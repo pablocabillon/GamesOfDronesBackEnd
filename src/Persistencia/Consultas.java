@@ -11,7 +11,7 @@ public class Consultas {
 	
 	
 	public String InsertarJugador(){
-		return "INSERT INTO JUGADOR (IdJugador,IdEquipo,IdPartida,NombreJugador) VALUES(?,?,?)";
+		return "INSERT INTO JUGADOR (idJugador,idEquipo,IdPartida,nombre) VALUES(?,?,?,?)";
 	}
 
 	public String ExisteJugador(){
@@ -19,7 +19,7 @@ public class Consultas {
 	}
 	
 	public String EliminarJugador(){
-		return "DELETE FROM JUGADOR WHERE IdJugador= ? AND IdEquipo=? AND IdPartida=?";
+		return "DELETE FROM JUGADOR WHERE idJugador= ? AND idEquipo=? AND idPartida=?";
 	}
 	
 	public String BuscarJugador(){
@@ -32,7 +32,7 @@ public class Consultas {
 
 	public String InsertarPartida(){
 		
-		return "INSERT INTO PARTIDA (IdPartida,FechaHora,CantJugadores,IdEscenario) VALUES(?,?,?,?)";
+		return "INSERT INTO PARTIDA (idPartida,fechaHora,CantJugadores,idEscenario) VALUES(?,?,?,?)";
 	   
 	}
 	
@@ -53,22 +53,22 @@ public class Consultas {
 	}
 	
 	public String InsertarEquipo(){
-		return "INSERT INTO EQUIPO (IdEquipo,IdPartida,NombreEquipo) VALUES(?,?,?)";
+		return "INSERT INTO EQUIPO (idEquipo,idPartida,nombre) VALUES(?,?,?)";
 	}
 
 	public String ExisteEquipo(){
-		return "SELECT * FROM EQUIPO WHERE IdEquipo= ? AND IdPartida=?";
+		return "SELECT * FROM EQUIPO WHERE idEquipo= ? AND idPartida=?";
 	}
 	
 	public String EliminarEquipo(){
-		return "DELETE FROM EQUIPOS WHERE IdEquipo= ? AND IdPartida=?";
+		return "DELETE FROM EQUIPO WHERE idEquipo= ? AND idPartida=?";
 	}
 	
 	public String BuscarEquiposPartida(){
 		return "SELECT * FROM EQUIPO WHERE IdPartida= ?";
 	}
 	public String InsertarObjeto(){
-		return "INSERT INTO OBJETO (IdObjeto,IdPartida,CoordX,CoordY,Rotacion,Angulo,Altura,Ancho) VALUES(?,?,?,?,?,?,?,?)";
+		return "INSERT INTO OBJETO (IdObjeto,IdPartida,CoordX,CoordY,Rotacion,Angulo,Altura,Ancho,tipo) VALUES(?,?,?,?,?,?,?,?,?)";
 	}
 
 	public String ExisteObjeto(){
@@ -76,11 +76,11 @@ public class Consultas {
 	}
 	
 	public String BuscarObjetosPartida(){
-		return "SELECT * FROM OBJETO WHERE IdPartida= ?";
+		return "SELECT * FROM OBJETO WHERE idPartida= ?";
 	}
 	
 	public String EliminarObjeto(){
-		return "DELETE FROM OBJETO WHERE IdObjeto= ? AND IdPartida= ?";
+		return "DELETE FROM OBJETO WHERE idObjeto= ? AND idPartida= ?";
 	}
 	
 	public String InsertarDron(){
@@ -129,5 +129,9 @@ public class Consultas {
 	
 	public String EliminarAereo(){
 		return "DELETE FROM AEREO WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
+	}
+	
+	public String buscarObjeto(){
+		return "SELECT * FROM OBJETO WHERE IdObjeto=? and IdPartida=?";
 	}
 }

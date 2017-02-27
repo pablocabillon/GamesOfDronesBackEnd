@@ -20,10 +20,10 @@ public class DAOObjeto {
 	
 private String Url, User, Password;
 	
-	public void DAOObjeto(){
-		this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-		this.User = "root";
-		this.Password = "pepito";
+	public DAOObjeto(String url,String user, String password){
+		this.Url = url;
+		this.User = user;
+		this.Password = password;
 	}
 	
 	
@@ -43,14 +43,15 @@ public void InsertarObjeto(Objeto vObjeto,int vIdPartida){
 			pstmt.setInt(6, vObjeto.ObtenerAngulo());
 			pstmt.setInt(7, vObjeto.ObtenerAltura());
 			pstmt.setInt(8, vObjeto.ObtenerAncho());
+			pstmt.setString(9,vObjeto.ObtenerTipo());
 			pstmt.executeUpdate();
 			pstmt.close();
 			con.close();
 			
 		} catch (ClassNotFoundException e) {
-			e.getMessage();
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 	}
 
@@ -76,9 +77,11 @@ public boolean ExisteObjeto(int vIdObjeto,int vIdPartida){
 		con.close();
 		
 	} catch (SQLException e) {
+		
+		System.out.println("Error de SQL");
 
 	} catch (ClassNotFoundException e) {
-		e.printStackTrace();
+		System.out.println(e.getMessage());
 	}
 	return existe;
 }
@@ -93,15 +96,16 @@ public void EliminarObjeto(int vIdObjeto,int vIdPartida){
 	    	
 		pstmt.setInt(1, vIdObjeto);
 		pstmt.setInt(2, vIdPartida);
-		pstmt.executeQuery();
+		pstmt.executeUpdate();
 		
 		pstmt.close();
 		con.close();
 		
 	} catch (ClassNotFoundException e) {
-		e.getMessage();
+		System.out.println(e.getMessage());
 	} catch (SQLException e) {
-
+		String error = Integer.toString(e.getErrorCode());
+		System.out.println(error);
 	}
 	
 }
@@ -109,14 +113,13 @@ public void EliminarObjeto(int vIdObjeto,int vIdPartida){
 public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 	
 	Objeto vObjeto=null;
-	String vTipo="";
 
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(Url, User, Password);
 		Consultas consultas = new Consultas();
 		
-		String DevolverObjeto = consultas.BuscarJugador();
+		String DevolverObjeto = consultas.buscarObjeto();
 		PreparedStatement pstmt = con.prepareStatement(DevolverObjeto);	
 		pstmt.setInt(1, vIdObjeto);
 		pstmt.setInt(2, vIdPartida);
@@ -125,7 +128,7 @@ public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 		
 		if(rs.next())
 		{
-			vObjeto=new Objeto(vIdObjeto, rs.getInt("CoordenadaX"),rs.getInt("CoordenadaY"), rs.getInt("Altura"),rs.getInt("Ancho"),rs.getInt("Rotacion"),rs.getInt("Angulo"), vTipo);
+			vObjeto=new Objeto(vIdObjeto, rs.getInt("coordX"),rs.getInt("coordY"), rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"));
 			
 		}	
 		rs.close();
@@ -134,9 +137,10 @@ public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 		
 		
 	} catch (SQLException e) {
+		System.out.println("Error de SQL");
 
 	} catch (ClassNotFoundException e) {
-		e.printStackTrace();
+		System.out.print(e.getMessage());
 	}
 
 	return vObjeto;
@@ -144,7 +148,7 @@ public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 
 public Objetos DevolverObjetosPartida(int vIdPartida){
 	
-	Objetos vObjetos=null;
+	Objetos vObjetos= new Objetos();
 	Objeto vObjeto=null;
 
 	try {
@@ -171,7 +175,7 @@ public Objetos DevolverObjetosPartida(int vIdPartida){
 		
 		
 	} catch (SQLException e) {
-
+		System.out.println("Error de SQL");
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();
 	}

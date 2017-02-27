@@ -19,21 +19,21 @@ public class DAOBase {
 	
 private String Url, User, Password;
 	
-	public void DAOBase(){
-		this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-		this.User = "root";
-		this.Password = "pepito";
+	public DAOBase(String url, String user, String password){
+		this.Url = url;
+		this.User = user;
+		this.Password = password;
 	}
 	
 	
-	public void InsertarBase(Base vBase,int vIdObjeto,int vIdPartida){ 
+	public void InsertarBase(Base vBase,int vIdPartida){ 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(Url, User, Password);
 			Consultas consultas = new Consultas();
 			String insertarBase = consultas.InsertarBase();
 			PreparedStatement pstmt = con.prepareStatement(insertarBase);
-			pstmt.setInt(1, vIdObjeto);
+			pstmt.setInt(1,vBase.ObtenerIdObjeto());
 			pstmt.setInt(2, vIdPartida);
 			pstmt.setInt(3, vBase.ObtenerVidaZonaPolvorin());
 			pstmt.setInt(4, vBase.ObtenerVidaZonaDespegue());
@@ -44,7 +44,7 @@ private String Url, User, Password;
 		} catch (ClassNotFoundException e) {
 			e.getMessage();
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 	}
 	
@@ -118,7 +118,7 @@ private String Url, User, Password;
 			
 			if(rs.next())
 			{
-				vObjeto=new DAOObjeto().DevolverObjeto(vIdObjeto, vIdPartida);
+				vObjeto=new DAOObjeto(Url,User,Password).DevolverObjeto(vIdObjeto, vIdPartida);
 				vBase=new Base(vObjeto.ObtenerIdObjeto(), vObjeto.ObtenerCoordenadaX(),vObjeto.ObtenerCoordenadaY(), vObjeto.ObtenerAltura(),vObjeto.ObtenerAncho(), vObjeto.ObtenerRotacion(),
 								vObjeto.ObtenerAngulo(),vObjeto.ObtenerTipo(),rs.getInt("VidaPolvorin"),rs.getInt("VidaZonaDespegue"));
 				

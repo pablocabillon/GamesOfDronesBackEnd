@@ -28,10 +28,10 @@ public class DAOJugador {
 	
 	private String Url, User, Password;
 	
-	public void DAOJugador(){
-		this.Url = "jdbc:mysql://localhost:3306/ultimabatalla";
-		this.User = "root";
-		this.Password = "pepito";
+	public DAOJugador(String url, String user, String password){
+		this.Url = url;
+		this.User = user;
+		this.Password = password;
 	}
 	
 	public void InsertarJugador(int IdJugador,int IdEquipo,int IdPartida,String NombreJugador){
@@ -45,7 +45,7 @@ public class DAOJugador {
 			pstmt.setInt(1, IdJugador);
 			pstmt.setInt(2, IdEquipo);
 			pstmt.setInt(3, IdPartida);
-			pstmt.setString(1, NombreJugador);
+			pstmt.setString(4, NombreJugador);
 			pstmt.executeUpdate();
 			pstmt.close();
 			con.close();
@@ -53,7 +53,7 @@ public class DAOJugador {
 		} catch (ClassNotFoundException e) {
 			e.getMessage();
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 	}
 	
@@ -136,7 +136,7 @@ public class DAOJugador {
 		return vJugador;
 	}
 	
-	public Jugadores DevolverJuadoresEquipo(int IdEquipo,int IdPartida){
+	public Jugadores DevolverJugadoresEquipo(int IdEquipo,int IdPartida){
 		
 		Jugadores vListaJugadores=null;
 		Jugador vJugador=null;
@@ -188,7 +188,7 @@ public class DAOJugador {
 			pstmt.setInt(1, vIdJugador);
 			pstmt.setInt(2, vIdEquipo);
 			pstmt.setInt(3, vIdPartida);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 			
 			pstmt.close();
 			con.close();
@@ -196,7 +196,7 @@ public class DAOJugador {
 		} catch (ClassNotFoundException e) {
 			e.getMessage();
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 		
 	}
