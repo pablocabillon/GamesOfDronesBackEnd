@@ -109,10 +109,12 @@ public class DAOJugador {
 			{
 				while(rs.next())
 				{
-					if(rs.getString("TieneBomba")!="")
-						vDron=new DronAereo(1,rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"),rs.getInt("MotoresActivos"),rs.getBoolean("TieneBomba"),rs.getBoolean("BombaRota"));
+					if(rs.getString("Tipo")=="Aereo")
+						vDron=new DronAereo(rs.getInt("IdObjeto"),rs.getInt("CoordenadaX"),rs.getInt("CoordenadaY"),rs.getInt("Alto"),rs.getInt("Ancho"),rs.getInt("Rotacion"),rs.getInt("Angulo"),
+								rs.getString("Tipo"), 1,rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"),rs.getInt("MotoresActivos"),rs.getBoolean("TieneBomba"),rs.getBoolean("BombaRota"));
 					else
-						vDron=new DronTerrestre(1, rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"), rs.getInt("BlindajeActivo"));
+						vDron=new DronTerrestre(rs.getInt("IdObjeto"),rs.getInt("CoordenadaX"),rs.getInt("CoordenadaY"),rs.getInt("Alto"),rs.getInt("Ancho"),rs.getInt("Rotacion"),rs.getInt("Angulo"),
+								rs.getString("Tipo"),1, rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"), rs.getInt("BlindajeActivo"));
 					
 					 vDrones.insert(rs.getInt("IdObjeto"),vDron);
 				}

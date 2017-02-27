@@ -95,7 +95,7 @@ public void InsertarDronTerrestre(DronTerrestre vDronTerrestre,int vIdObjeto,int
 	} catch (ClassNotFoundException e) {
 		e.getMessage();
 	} catch (SQLException e) {
-
+		e.getMessage();
 	}
 }
 

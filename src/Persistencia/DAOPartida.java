@@ -30,7 +30,7 @@ public void DAOPartida(){
 		this.Password = "pepito";
 	}
 
-public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores){
+public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores,int vEscenario){
 	
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -41,6 +41,7 @@ public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores){
 		pstmt.setInt(1, vIdPartida);
 		pstmt.setDate(2, vFecha);
 		pstmt.setInt(3, vCantJugadores);
+		pstmt.setInt(4, vEscenario);
 		pstmt.executeUpdate();
 		pstmt.close();
 		con.close();
@@ -105,7 +106,7 @@ public Partida DevolverPartida(int vIdPartida){
 	Equipos vEquipos=null;
 	Jugadores vJugadores=null;
 	Objetos vObjetos=null;
-	Escenario vEscenario=null;
+	
 
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -122,7 +123,7 @@ public Partida DevolverPartida(int vIdPartida){
 		{
 			vEquipos=new DAOEquipo().DevolverEquiposPArtida(vIdPartida);
 			vObjetos=new DAOObjeto().DevolverObjetosPartida(vIdPartida);
-			vPartida=new Partida(vEquipos, vEscenario.EscenarioAleatorio(), vObjetos, rs.getInt("CantJugadores"));
+			vPartida=new Partida(vEquipos, rs.getInt("IdEscenario"), vObjetos, rs.getInt("CantJugadores"));
 			
 		}	
 		rs.close();
@@ -131,7 +132,7 @@ public Partida DevolverPartida(int vIdPartida){
 		
 		
 	} catch (SQLException e) {
-
+			
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();
 	}

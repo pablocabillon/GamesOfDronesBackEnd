@@ -23,16 +23,16 @@ public class Consultas {
 	}
 	
 	public String BuscarJugador(){
-		return "SELECT JU.NombreJugador,DR.Camara,DR.Cañon,DR.Vision,AE.MotoresActivos,AE.TieneBomba,TE.BlindajeActivo FROM JUGADOR AS JU INNER JOIN DRON AS DR ON JU.IdJugador=DR.IdJugador"
-				+ " AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto AND OB.IdObjeto=DR.IdObjeto INNER JOIN TERRESTRE AS TE"
-				+ "LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN"
+		return "SELECT JU.NombreJugador,DR.Camara,DR.Cañon,DR.Vision,AE.MotoresActivos,AE.TieneBomba,TE.BlindajeActivo,OB.idObjeto,OB.CoordenadaX,OB.CoordenadaY,OB.Alto,OB.Rotacion,OB.Angulo,OB.Tipo"
+				+ " FROM JUGADOR AS JU INNER JOIN DRON AS DR ON JU.IdJugador=DR.IdJugador AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto AND OB.IdObjeto=DR.IdObjeto"
+				+ " INNER JOIN TERRESTRE AS TE LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN"
 				+ "AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador"
 				+ "WHERE JU.IdJugador= ? AND JU.IdEquipo=? AND JU.IdPartida=?";
 	}
 
 	public String InsertarPartida(){
 		
-		return "INSERT INTO PARTIDA (IdPartida,FechaHora,CantJugadores) VALUES(?,?,?)";
+		return "INSERT INTO PARTIDA (IdPartida,FechaHora,CantJugadores,IdEscenario) VALUES(?,?,?,?)";
 	   
 	}
 	
