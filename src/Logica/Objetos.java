@@ -33,4 +33,5 @@ public class Objetos {
 		return Objetos.get(vClave);
 	}
 	
+	
 }

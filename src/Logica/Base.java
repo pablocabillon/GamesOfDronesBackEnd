@@ -37,6 +37,7 @@ public class Base extends Objeto{
 	{
 		this.VidaZonaDespegue=vVidaZonaDespuegue;
 	}
+	
 
 	
 }

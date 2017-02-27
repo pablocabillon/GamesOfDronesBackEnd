@@ -1,6 +1,8 @@
 package Logica;
 
 import java.util.Hashtable;
+import java.util.Iterator;
+
 
 /*********************************************
  * Descripción: 	Clase que contiene los métodos del diccionario de Equipops
@@ -31,4 +33,5 @@ public class Equipos {
 	{
 		return Equipos.get(vClave);
 	}
+	
 }

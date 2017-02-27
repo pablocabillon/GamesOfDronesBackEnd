@@ -1,6 +1,7 @@
 package Logica;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /*********************************************
  * Descripción: 	Clase que contiene los m{etodos de los Jugadores
@@ -32,6 +33,11 @@ public class Jugadores {
 	public Jugador Find (int vIdJugador )
 	{
 		return Jugadores.get(vIdJugador);
+	}
+	
+	public int CantJugadores(){
+		
+		return Jugadores.size();
 	}
 
 }

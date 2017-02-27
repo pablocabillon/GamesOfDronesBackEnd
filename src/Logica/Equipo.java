@@ -1,5 +1,7 @@
 package Logica;
 
+import java.util.Iterator;
+
 /*********************************************
  * Descripción: 	Clase que contiene los atributos y funciones del Equipo
  * Autor: 			Martín Torres
@@ -39,4 +41,5 @@ public class Equipo {
 		this.Jugadores=vJugadores;
 	}
 	
+		
 }

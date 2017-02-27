@@ -6,7 +6,7 @@ package Logica;
  * Versión: 		1.0.0
  * Modificaciones: 
  **********************************************/
-public abstract class Dron {
+public abstract class Dron extends Objeto {
 
 	
 	private int Velocidad;
@@ -15,8 +15,9 @@ public abstract class Dron {
 	private int Vision;
 	
 
-	public Dron(int vVelocidad,boolean vCamara,boolean vCanon,int vVision)
+	public Dron(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo,int vVelocidad,boolean vCamara,boolean vCanon,int vVision)
 	{
+		super(vIdObjeto,vCoordenadaX,vCoordenadaY,vAltura,vAncho,vRotacion,vAngulo, vTipo);
 		this.Velocidad=vVelocidad;
 		this.Camara=vCamara;
 		this.Canon=vCanon;

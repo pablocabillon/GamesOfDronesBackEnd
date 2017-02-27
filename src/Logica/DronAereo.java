@@ -13,9 +13,9 @@ public class DronAereo extends Dron {
 	private boolean TieneBomba;
 	private boolean BombaRota;
 	
-	public DronAereo (int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vMotoresActivos,boolean vTieneBomba,boolean vBombaRota)
+	public DronAereo (int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo,int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vMotoresActivos,boolean vTieneBomba,boolean vBombaRota)
 	{
-		super(vVelocidad,vCamara,vCanon,vVision);
+		super(vIdObjeto,vCoordenadaX,vCoordenadaY,vAltura,vAncho,vRotacion,vAngulo, vTipo,vVelocidad,vCamara,vCanon,vVision);
 		this.MotoresActivos=vMotoresActivos;
 		this.TieneBomba=vTieneBomba;
 		this.BombaRota=vBombaRota;

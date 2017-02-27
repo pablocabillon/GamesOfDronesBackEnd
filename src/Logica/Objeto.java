@@ -17,7 +17,10 @@ public class Objeto {
 	private int Angulo;
 	private String Tipo;
 	
-
+	
+	public Objeto(){
+		
+	}
 	public Objeto(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo)
 	{
 		this.IdObjeto=vIdObjeto;
@@ -99,4 +102,51 @@ public class Objeto {
 		this.Tipo=vTipo;
 	}
 
+	public Objeto GenerarObjeto(int vIdObjeto,String vTipo){
+		
+		int vCoordenadaX;
+		int vCoordenadaY;
+		int vAltura=50;//dato dado
+		int vAncho=10;//dato dado
+		int vRotacion=90;//dato dado
+		int vAngulo=180;//dato dado
+		int vVidaZonaPolvorin=2;
+		int vVidaZonaDespegue=10;
+		Objeto vObjeto=null;
+		int vVelocidad=4;
+		Boolean vCamara=true;
+		Boolean vCanon=true;
+		int vVision=1;
+		int vMotoresActivos=4;
+		Boolean vTieneBomba=true;
+		Boolean vBombaRota=false;
+		int vBlindajeActivo=4;
+		int vMax;
+		int vMin;
+		if(vTipo=="Base"){
+			vMax=100;
+			vMin=50;
+			vCoordenadaX= (int)(Math.random()*(vMax-vMin))+vMin;
+			vCoordenadaY= (int)(Math.random()*(vMax-vMin))+vMin;
+			vObjeto=new Base(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVidaZonaPolvorin, vVidaZonaDespegue);
+		}
+		if(vTipo=="Aereo"){
+			vMax=100;
+			vMin=50;
+			vCoordenadaX= (int)(Math.random()*(vMax-vMin))+vMin;
+			vCoordenadaY= (int)(Math.random()*(vMax-vMin))+vMin;
+			vObjeto=new DronAereo(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVelocidad, vCamara, vCanon, vVision, vMotoresActivos, vTieneBomba, vBombaRota);
+		}
+		if(vTipo=="Terrestre"){
+			vMax=100;
+			vMin=50;
+			vCoordenadaX= (int)(Math.random()*(vMax-vMin))+vMin;
+			vCoordenadaY= (int)(Math.random()*(vMax-vMin))+vMin;
+		vObjeto=new DronTerrestre(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVelocidad, vCamara, vCanon, vVision, vBlindajeActivo);
+		}
+		
+		
+		return vObjeto;
+		
+	}
 }

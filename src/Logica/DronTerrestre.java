@@ -11,9 +11,9 @@ public class DronTerrestre extends Dron {
 
 	private int BlindajeActivo;
 	
-	public DronTerrestre(int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vBlindajeActivo)
+	public DronTerrestre(int vIdObjeto,int vCoordenadaX,int vCoordenadaY,int vAltura,int vAncho,int vRotacion,int vAngulo,String vTipo,int vVelocidad,boolean vCamara,boolean vCanon,int vVision,int vBlindajeActivo)
 	{
-		super(vVelocidad,vCamara,vCanon,vVision);
+		super(vIdObjeto,vCoordenadaX,vCoordenadaY,vAltura,vAncho,vRotacion,vAngulo, vTipo,vVelocidad,vCamara,vCanon,vVision);
 		this.BlindajeActivo=vBlindajeActivo;
 	}
 	

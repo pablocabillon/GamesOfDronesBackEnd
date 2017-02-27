@@ -11,11 +11,11 @@ import Logica.Escenario.Escenarios;
 public class Partida {
 	
 	private Equipos Equipos;
-	private Escenarios Escenario;
+	private int Escenario;
 	private Objetos Objetos;
 	private int CantJugadores;
 
-	public Partida(Equipos vEquipos,Escenarios vEscenario,Objetos vObjetos,int vCantJugadores)
+	public Partida(Equipos vEquipos,int vEscenario,Objetos vObjetos,int vCantJugadores)
 	{
 		this.Equipos=vEquipos;
 		this.Escenario=vEscenario;
@@ -37,4 +37,37 @@ public class Partida {
 	{
 		
 	}
+
+	public Equipos getEquipos() {
+		return Equipos;
+	}
+
+	public void setEquipos(Equipos equipos) {
+		Equipos = equipos;
+	}
+
+	public int getEscenario() {
+		return Escenario;
+	}
+
+	public void setEscenario(int escenario) {
+		Escenario = escenario;
+	}
+
+	public Objetos getObjetos() {
+		return Objetos;
+	}
+
+	public void setObjetos(Objetos objetos) {
+		Objetos = objetos;
+	}
+
+	public int getCantJugadores() {
+		return CantJugadores;
+	}
+
+	public void setCantJugadores(int cantJugadores) {
+		CantJugadores = cantJugadores;
+	}
+	
 }
