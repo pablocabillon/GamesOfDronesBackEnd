@@ -104,7 +104,7 @@ public class Consultas {
 	}
 	
 	public String EliminarBase(){
-		return "DELETE FROM BASE WHERE IdObjeto= ? AND IdPartida=?";
+		return "DELETE FROM BASE WHERE idObjeto= ? AND idPartida=?";
 	}
 	
 	public String InsertarTerrestre(){

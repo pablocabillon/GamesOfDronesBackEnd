@@ -69,7 +69,7 @@ private String Url, User, Password;
 			con.close();
 			
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -86,7 +86,7 @@ private String Url, User, Password;
 		    	
 			pstmt.setInt(1, vIdObjeto);
 			pstmt.setInt(2, vIdPartida);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 			
 			pstmt.close();
 			con.close();
@@ -94,7 +94,7 @@ private String Url, User, Password;
 		} catch (ClassNotFoundException e) {
 			e.getMessage();
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		}
 		
 	}
@@ -120,7 +120,7 @@ private String Url, User, Password;
 			{
 				vObjeto=new DAOObjeto(Url,User,Password).DevolverObjeto(vIdObjeto, vIdPartida);
 				vBase=new Base(vObjeto.ObtenerIdObjeto(), vObjeto.ObtenerCoordenadaX(),vObjeto.ObtenerCoordenadaY(), vObjeto.ObtenerAltura(),vObjeto.ObtenerAncho(), vObjeto.ObtenerRotacion(),
-								vObjeto.ObtenerAngulo(),vObjeto.ObtenerTipo(),rs.getInt("VidaPolvorin"),rs.getInt("VidaZonaDespegue"));
+								vObjeto.ObtenerAngulo(),vObjeto.ObtenerTipo(),rs.getInt("vidaPolvorin"),rs.getInt("vidaZonaDespegue"));
 				
 			}	
 			rs.close();
@@ -129,6 +129,7 @@ private String Url, User, Password;
 			
 			
 		} catch (SQLException e) {
+			System.out.println("Error de SQL");
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

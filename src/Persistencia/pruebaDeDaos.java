@@ -117,9 +117,36 @@ public class pruebaDeDaos {
 //				else 
 //					System.out.println("No existe partida");
 				
-				DAOBase daoBase = new DAOBase(url,user,password);
-				Base base = new Base(1,10,15,90,90,60,69,"Base",2,3);
-				daoBase.InsertarBase(base,1);
+//				DAOBase daoBase = new DAOBase(url,user,password);
+//				Base base = new Base(1,10,15,90,90,60,69,"Base",2,3);
+//				daoBase.InsertarBase(base,1);
+//				daoBase.EliminarBase(1,1);
+//				//Base base = daoBase.DevolverBase(1,1);
+//				String id = Integer.toString(base.ObtenerIdObjeto());
+//				String coordX = Integer.toString(base.ObtenerCoordenadaX());
+//				String coordY = Integer.toString(base.ObtenerCoordenadaY());
+//				String altura = Integer.toString(base.ObtenerAltura());
+//				String ancho = Integer.toString(base.ObtenerAncho());
+//				String rotacion = Integer.toString(base.ObtenerRotacion());
+//				String angulo = Integer.toString(base.ObtenerAngulo());
+//				String tipo = base.ObtenerTipo();
+//				
+//				System.out.println(id);
+//				System.out.println("Coordena X: "+coordX);
+//				System.out.println("Coordena Y: "+coordY);
+//				System.out.println("Altura : "+altura);
+//				System.out.println("Ancho : "+ancho);
+//				System.out.println("Rotacion: "+rotacion);
+//				System.out.println("Angulo: " + angulo);
+//				System.out.println("Tipo: " + tipo);
+//				
+//				if(daoBase.ExisteBase(1,1))
+//					System.out.println("Existe base");
+//				else
+//					System.out.println("No existe base");
+				
+				DAODron daoDron = new DAODron(url,user,password);
+				
 				
 				}
 				catch (IOException e) {
