@@ -3,13 +3,12 @@ package Logica;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Properties;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import Persistencia.AccesoBase;
@@ -57,38 +56,47 @@ public class Fachada {
 
 	}
 	
-	public JsonElement CrearPartida(int vCantidadJugadores) throws IOException{
-		JsonElement vRespuesta = null;
+	public JsonObject CrearPartida(int vCantidadJugadores) throws IOException{
+		JsonObject vRespuesta = new JsonObject();
 		
 		if(vIdPArtidaActual>0){
-			vRespuesta=new JsonParser().parse("Msg: Ya hay una partida creada.");
+			vRespuesta.addProperty("tipo","crearPartida");
+			vRespuesta.addProperty("retorno","Ya hay una partida creada.");
 		}
 		else
 		{
-		Equipos vEquipos=new Equipos();
-		Equipo vEquipo1=new Equipo(1, "EquipoAereo", new Jugadores());
-		Equipo vEquipo2=new Equipo(1, "EquipoTerrestre", new Jugadores());
-		vEquipos.insert(1, vEquipo1);
-		vEquipos.insert(2, vEquipo2);
-		Objetos vObjetos=new Objetos();
-		Objeto vBase=new Objeto().GenerarObjeto(1, "Base");
-		vObjetos.insert(vBase.ObtenerIdObjeto(), vBase);//Generarlo con IdObjeto 1
-		int vEscenario=new Escenario().EscenarioAleatorio().ordinal();//verificar
-		vPartida=new Partida(vEquipos, vEscenario, vObjetos, vCantidadJugadores);
-		vIdPArtidaActual=vIdPArtidaActual+1;
-		vCantJugadores=vCantidadJugadores;
-		vRespuesta = new JsonParser().parse("Msg: Partida creada correctamente");		          
+			Equipos vEquipos=new Equipos();
+			Equipo vEquipo1=new Equipo(1, "EquipoAereo", new Jugadores());
+			Equipo vEquipo2=new Equipo(1, "EquipoTerrestre", new Jugadores());
+			vEquipos.insert(1, vEquipo1);
+			vEquipos.insert(2, vEquipo2);
+			Objetos vObjetos=new Objetos();
+			Objeto vBase=new Objeto().GenerarObjeto(1, "Base");
+			vObjetos.insert(vBase.ObtenerIdObjeto(), vBase);//Generarlo con IdObjeto 1
+			int vEscenario=new Escenario().EscenarioAleatorio().ordinal();//verificar
+			vPartida=new Partida(vEquipos, vEscenario, vObjetos, vCantidadJugadores);
+			vIdPArtidaActual=vIdPArtidaActual+1;
+			vCantJugadores=vCantidadJugadores;
+			vRespuesta.addProperty("tipo","crearPartida");
+			vRespuesta.addProperty("retorno","ok");	
+			vRespuesta.addProperty("Escenario",vEscenario);	
+			vRespuesta.addProperty("BaseX",vBase.ObtenerCoordenadaX());
+			vRespuesta.addProperty("BaseY",vBase.ObtenerCoordenadaY());
+			vRespuesta.addProperty("ID",vBase.ObtenerIdObjeto());
 		}
 		
 		return vRespuesta;
 	}
 	
-	public JsonElement UnirsePartidaAereo(String vNombreJugador,int vIdDron,int vIdDron1){
+	public JsonObject UnirsePartidaAereo(String vNombreJugador,int vIdDron,int vIdDron1){
 		
-		JsonElement vRespuesta = null;
+		JsonObject vRespuesta = new JsonObject();
 		
-		if(vCantJugadores==0)
-			vRespuesta=new JsonParser().parse("Msg: No se puede ingresar a la Partida.");
+		if(vCantJugadores==0){
+			vRespuesta.addProperty("tipo", "unirPartida");
+			vRespuesta.addProperty("retorno", "Ya se encuentra la totalidad de jugadores.");
+			
+		}
 	   else{
 			vIdJugadorAereo=vIdJugadorAereo+1;
 			Drones vDrones=new Drones();
@@ -103,22 +111,37 @@ public class Fachada {
 			Jugador vJugador=new Jugador(vIdJugadorAereo, vNombreJugador, vDrones);
 			vPartida.getEquipos().Find(1).ObtenerJugadores().insert(vJugador);
 			vCantJugadores--;
-			if(vCantJugadores==0)
-				vRespuesta=new JsonParser().parse("Msg: Iniciar Partida.");
-			else
-				vRespuesta=new JsonParser().parse("Msg: Esperar.");
+			if(vCantJugadores==0){
+				vRespuesta.addProperty("tipo", "unirPartida");
+				vRespuesta.addProperty("retorno","iniciar");
+				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
+				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
+				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
+				
+			}
+			else{
+				vRespuesta.addProperty("tipo", "unirPartida");
+				vRespuesta.addProperty("retorno","esperar");
+				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
+				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
+				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
+				
+			}
 						
 			}
 		
 		return vRespuesta;
 	}
 
-	public JsonElement UnirsePartidaTerrestre(String vNombreJugador,int vIdDron,int vIdDron1){
+	public JsonObject UnirsePartidaTerrestre(String vNombreJugador,int vIdDron,int vIdDron1){
 		
-		JsonElement vRespuesta = null;
+		JsonObject vRespuesta = new JsonObject();
 		
-		if(vCantJugadores==0)
-			vRespuesta=new JsonParser().parse("Msg: No se puede ingresar a la Partida.");
+		if(vCantJugadores==0){
+			vRespuesta.addProperty("tipo", "unirPartida");
+			vRespuesta.addProperty("retorno", "Ya se encuentra la totalidad de jugadores.");
+			
+		}
 	   else{
 		    vIdJugadorTerrestre=vIdJugadorTerrestre+1;
 			Drones vDrones=new Drones();
@@ -133,10 +156,22 @@ public class Fachada {
 			Jugador vJugador=new Jugador(vIdJugadorTerrestre, vNombreJugador, vDrones);
 			vPartida.getEquipos().Find(2).ObtenerJugadores().insert(vJugador);
 			vCantJugadores--;
-			if(vCantJugadores==0)
-				vRespuesta=new JsonParser().parse("Msg: Iniciar Partida.");
-			else
-				vRespuesta=new JsonParser().parse("Msg: Esperar.");
+			if(vCantJugadores==0){
+				vRespuesta.addProperty("tipo", "unirPartida");
+				vRespuesta.addProperty("retorno","iniciar");
+				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
+				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
+				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
+				
+			}
+			else{
+				vRespuesta.addProperty("tipo", "unirPartida");
+				vRespuesta.addProperty("retorno","esperar");
+				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
+				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
+				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
+				
+			}
 						
 			}
 		
@@ -147,20 +182,20 @@ public class Fachada {
 	{
 		long time = System.currentTimeMillis();
 		java.sql.Date fecha_guardar = new java.sql.Date(time);
-		new DAOPartida().InsertarPartida(vIdPArtidaActual, fecha_guardar, vCantJugadores, vPartida.getEscenario());
-		new DAOEquipo().InsertarEquipo(vPartida.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerNombre());
-		new DAOEquipo().InsertarEquipo(vPartida.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerNombre());
+		new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarPartida(vIdPArtidaActual, fecha_guardar, vCantJugadores, vPartida.getEscenario());
+		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerNombre());
+		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerNombre());
 		
 		int vCantJugadoresEquipo1=vPartida.getEquipos().Find(1).ObtenerJugadores().CantJugadores();
 		int vCantJugadoresEquipo2=vPartida.getEquipos().Find(2).ObtenerJugadores().CantJugadores();
-			new DAOJugador().InsertarJugador(1,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre());
-			new DAOJugador().InsertarJugador(1,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre());
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre());
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre());
 			
 		if(vCantJugadoresEquipo1==2)
-			new DAOJugador().InsertarJugador(2,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(2).ObtenerNombre());
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(2).ObtenerNombre());
 			
 		if(vCantJugadoresEquipo2==1)
-			new DAOJugador().InsertarJugador(2,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(2).ObtenerNombre());
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(2).ObtenerNombre());
 		
 		GuardarDrones(vCantJugadoresEquipo1,vCantJugadoresEquipo2);
 		
@@ -172,6 +207,7 @@ public class Fachada {
 	
 	public void GuardarDrones(int vCantJugadoresEquipo1,int vCantJugadoresEquipo2){
 		
+		
 		for (int i=1;i<=vCantJugadoresEquipo1;i++){
 			
 			int vCantidadDronesJugador=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().cantElementos();
@@ -180,8 +216,8 @@ public class Fachada {
 				
 				int vIdObjeto=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j).ObtenerIdObjeto();
 				int vIdJugador=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerIdJugador();
-				new DAODron().InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
-				new DAODron().InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
 			}
 		}
 		
@@ -193,8 +229,8 @@ public class Fachada {
 				
 				int vIdObjeto=vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j).ObtenerIdObjeto();
 				int vIdJugador=vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerIdJugador();
-				new DAODron().InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
-				new DAODron().InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdObjeto, vIdPArtidaActual, vIdJugador);
 			}
 		}
 		
@@ -236,71 +272,80 @@ public class Fachada {
 	vVidaZonaPolvorin=vBase.ObtenerVidaZonaPolvorin();
 	vVidaZonaDespegue=vBase.ObtenerVidaZonaDespegue();
 	Base vBaseInsert=new Base(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVidaZonaPolvorin, vVidaZonaDespegue);
-	new DAOBase().InsertarBase(vBaseInsert, 1, vIdPArtidaActual);
+	new DAOBase(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarBase(vBaseInsert,vIdPArtidaActual);
 		
 	}
 	
 	public Partida ReanudarPartida(int vIdPartida){
 		
-		return vPartida = new DAOPartida().DevolverPartida(vIdPartida);
+		return vPartida = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(vIdPartida);
 		 
 	}
 	
-	public JsonElement DisparaBase(int  vIdObjeto){
+	public JsonObject DisparaBase(int  vIdObjeto,String Sector){
 		
-		JsonElement vRespuesta = null;
+		JsonObject vRespuesta = new JsonObject();
+		vRespuesta.addProperty("tipo", "disparoBAse");
 		Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
-		String vGolpe;
-			vGolpe=new Conversor().Base((int)(Math.random()*(2))+2);
-			switch (vGolpe) {
-	    	case "VidaPolvorin":
+			switch (Sector) {
+	    	case "polvorin":
 	    		((Base) vObjeto).SetearVidaZonaPolvorin(((Base) vObjeto).ObtenerVidaZonaPolvorin()-1);
 	    		break;
-	    	case "VidaDespegue":
+	    	case "despuegue":
 	    		((Base) vObjeto).SetearVidaZonaDespegue(((Base) vObjeto).ObtenerVidaZonaDespegue()-1);
 	    		break;
 		     default:
 		  }
 			
 			if(((Base) vObjeto).ObtenerVidaZonaPolvorin()==0 ||((Base) vObjeto).ObtenerVidaZonaDespegue()==0)
-				vRespuesta=new JsonParser().parse("Msg: Base Explotada.");
+				vRespuesta.addProperty("destruida", true);
+			else
+				vRespuesta.addProperty("destruida", false);
 			
 			return vRespuesta;
 		
 	}
 	
-	public JsonElement DisparaDronAereo(int  vIdObjeto){
+	public JsonObject DisparaDronAereo(int  vIdObjeto){
 		
-		JsonElement vRespuesta = null;
+		JsonObject vRespuesta = new  JsonObject();
+		vRespuesta.addProperty("tipo","disparoTerrestre");
 		Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
+		
+		vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
 		String vGolpe;
 			vGolpe=new Conversor().DronAereo((int)(Math.random()*(6))+2);
 			switch (vGolpe) {
 	    	case "Velocidad":
 	    		if(((DronAereo) vObjeto).ObtenerVelocidad()>0)
 	    			((DronAereo) vObjeto).SetearVelocidad(((DronAereo) vObjeto).ObtenerVelocidad()-1);
+	    		vRespuesta.addProperty("golpe","Velocidad");
 	    		break;
 	    	case "Camara":
 	    		((DronAereo) vObjeto).SetearCamara(false);
-	    		
+	    		vRespuesta.addProperty("golpe","Camara");
 	    		break;
 	    	case "Canon":
 	    		((DronAereo) vObjeto).SetearCanon(false);
+	    		vRespuesta.addProperty("golpe","Canon");
 	    		break;
 	    	case "Vision":
 	    		if(((DronAereo) vObjeto).ObtenerVision()>0)
 	    			((DronAereo) vObjeto).SetearVision(((DronAereo) vObjeto).ObtenerVision()-1);
+	    		vRespuesta.addProperty("golpe","Vision");
 	    		break;
 	    	case "Motores":
 	    		if(((DronAereo) vObjeto).ObtenerMotorActivo()>0)
 	    			((DronAereo) vObjeto).SetearMotorActivo(((DronAereo) vObjeto).ObtenerMotorActivo()-1);
+	    		vRespuesta.addProperty("golpe","Motores");
 	    		break;
 	    	case "Bomba":
 	    		((DronAereo) vObjeto).SetearBombaRota(true);	
+	    		vRespuesta.addProperty("golpe","Bomba");
+	    		vRespuesta.addProperty("destruida",true);
 	    		break;
 	     default:
 	  }
-			vRespuesta=new JsonParser().parse("Msg:Pego" + vGolpe);
 			return vRespuesta;
 		
 	}

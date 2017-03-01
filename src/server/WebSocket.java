@@ -27,10 +27,15 @@ public class WebSocket {
 	
 	@OnMessage
 	public void onMessage(String mensaje, Session sesion) throws IOException {
-//	    JsonReader jLector = Json.createReader(new StringReader(mensaje));         
-//	    JsonObject jMensaje = jLector.readObject();         
-//	    jLector.close();
+	
 		JsonElement jelement = new JsonParser().parse(mensaje);
+		String vTipo = jelement.getAsJsonObject().get("tipo").toString();
+		
+		switch(vTipo){
+
+		}
+		
+		
 		JsonObject  jobject = jelement.getAsJsonObject();
 	    synchronized(conexiones){
 		      // Recorro los clientes conectados y reenvío el mensaje recibido.
