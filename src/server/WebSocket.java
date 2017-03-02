@@ -16,6 +16,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import Logica.Fachada;
+
 
 
 @ServerEndpoint("/websocket")
@@ -25,27 +27,120 @@ public class WebSocket {
 	
 	private static Set<Session> conexiones = Collections.synchronizedSet(new HashSet<Session>());
 	
+	private Fachada vFachada=new Fachada(); 
+	
+	private int vCantidadJugadoresPartida=0;
+	
+	private int vIdDronAereo=0;
+	
+	private int vIdDronTerrestre=0;
+	
 	@OnMessage
 	public void onMessage(String mensaje, Session sesion) throws IOException {
 	
 		JsonElement jelement = new JsonParser().parse(mensaje);
 		String vTipo = jelement.getAsJsonObject().get("tipo").toString();
+		JsonObject vRespuesta=null;
 		
 		switch(vTipo){
-
+		case "MueveAereo":
+		case "MueveTerrestre":
+			 vRespuesta = jelement.getAsJsonObject();
+			 synchronized(conexiones){
+		      for(Session client : conexiones){
+		        if (!client.equals(sesion)){
+		            client.getBasicRemote().sendText(vRespuesta.toString());
+		        }
+		      }
+			 }
+			break;
+		case "crearPartida":
+			    int vCantJugadores=jelement.getAsJsonObject().get("jugadores").getAsInt();
+			    vCantidadJugadoresPartida=vCantJugadores;
+				vRespuesta=vFachada.CrearPartida(vCantJugadores);
+				 synchronized(conexiones){
+				for(Session client : conexiones){
+			        if (client.equals(sesion)){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+			        }
+			      }
+				 }
+			break;
+		case "unirPartida":
+				if(jelement.getAsJsonObject().get("equipo").toString()=="aereo"){
+						if(vCantidadJugadoresPartida==4){
+							vIdDronAereo=vIdDronAereo+1;
+							vRespuesta=vFachada.UnirsePartidaAereo(jelement.getAsJsonObject().get("nombreJugador").toString(),vIdDronAereo,0);
+						}
+						else{
+							vIdDronAereo=vIdDronAereo+2;
+							vRespuesta=vFachada.UnirsePartidaAereo(jelement.getAsJsonObject().get("nombreJugador").toString(),1,2);
+						}
+				}
+				else{
+					if(vCantidadJugadoresPartida==4){
+						vIdDronTerrestre=vIdDronTerrestre+1;
+						vRespuesta=vFachada.UnirsePartidaTerrestre(jelement.getAsJsonObject().get("nombreJugador").toString(),vIdDronTerrestre,0);
+					}
+					else{
+						vIdDronTerrestre=vIdDronTerrestre+2;
+						vRespuesta=vFachada.UnirsePartidaTerrestre(jelement.getAsJsonObject().get("nombreJugador").toString(),1,2);
+					}
+					
+					
+				}	
+				synchronized(conexiones){
+				for(Session client : conexiones){
+			        if (client.equals(sesion)){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+			        }
+			      }
+				}
+			break;
+			
+		case "guardarPartida":
+			
+			break;
+			
+		case "disparoBase":
+				vRespuesta=vFachada.DisparaBase(jelement.getAsJsonObject().get("IdBase").getAsInt(), jelement.getAsJsonObject().get("sector").toString());
+				synchronized(conexiones){
+				for(Session client : conexiones){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+			        }
+			   }
+				break;
+			
+		case "disparoAereo":
+				vRespuesta=vFachada.GolpeDronTerrestre(jelement.getAsJsonObject().get("IdDronAereo").getAsInt(),jelement.getAsJsonObject().get("IdDronTerrestre").getAsInt(),jelement.getAsJsonObject().get("tipoDisparo").toString());
+					
+				synchronized(conexiones){
+					for(Session client : conexiones){
+				            client.getBasicRemote().sendText(vRespuesta.toString());
+				        }
+				   }
+			break;
+			
+		case "disparoTerrestre":
+				vRespuesta=vFachada.GolpeDronAereo(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
+				synchronized(conexiones){
+					for(Session client : conexiones){
+				            client.getBasicRemote().sendText(vRespuesta.toString());
+				        }
+				   }
+			break;
+			
+		case "TiraBomba":
+			vRespuesta=vFachada.TirarBomba(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
+			synchronized(conexiones){
+				for(Session client : conexiones){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+			        }
+			   }
+			break;
+			
+		default:
 		}
-		
-		
-		JsonObject  jobject = jelement.getAsJsonObject();
-	    synchronized(conexiones){
-		      // Recorro los clientes conectados y reenvío el mensaje recibido.
-	      for(Session client : conexiones){
-	        if (!client.equals(sesion)){
-	            client.getBasicRemote().sendText(jobject.toString());
-	        }
-	      }
-	  }
-
 	}
 	 
 	@OnOpen

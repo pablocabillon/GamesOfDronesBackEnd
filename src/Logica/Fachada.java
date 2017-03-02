@@ -306,7 +306,7 @@ public class Fachada {
 		
 	}
 	
-	public JsonObject DisparaDronAereo(int  vIdObjeto){
+	public JsonObject GolpeDronAereo(int  vIdObjeto){
 		
 		JsonObject vRespuesta = new  JsonObject();
 		vRespuesta.addProperty("tipo","disparoTerrestre");
@@ -342,55 +342,79 @@ public class Fachada {
 	    	case "Bomba":
 	    		((DronAereo) vObjeto).SetearBombaRota(true);	
 	    		vRespuesta.addProperty("golpe","Bomba");
-	    		vRespuesta.addProperty("destruida",true);
 	    		break;
 	     default:
 	  }
+			if(((DronAereo) vObjeto).ObtenerVelocidad()==0 && ((DronAereo) vObjeto).ObtenerCamara()==false && ((DronAereo) vObjeto).ObtenerCanon()==false 
+					&& ((DronAereo) vObjeto).ObtenerMotorActivo()==0 && ((DronAereo) vObjeto).ObtenerVision()==0) 
+					vRespuesta.addProperty("destruida",true);
+			else if(((DronAereo) vObjeto).ObtenerBombaRota()==true)
+					vRespuesta.addProperty("destruida",true);
+			else
+				vRespuesta.addProperty("destruida",false);
 			return vRespuesta;
 		
 	}
 	
-	public JsonElement DisparaDronTerrestre(int  vIdObjeto){
+	public JsonObject GolpeDronTerrestre(int  vIdObjetoAereo,int vIdobjetoTerrestre,String vTipoDisparo){
 	
-	JsonElement vRespuesta = null;
-	Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
-	String vGolpe;
-	vGolpe=new Conversor().DronTerrestre((int)(Math.random()*(6))+2);
-		switch (vGolpe) {
-		case "Velocidad":
-    		if(((DronTerrestre) vObjeto).ObtenerVelocidad()>0)
-    			((DronTerrestre) vObjeto).SetearVelocidad(((DronTerrestre) vObjeto).ObtenerVelocidad()-1);
-    			vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(vIdObjeto).SetearVelocidad(1);
-    		break;
-    	case "Camara":
-    		((DronTerrestre) vObjeto).SetearCamara(false);
-    		break;
-    	case "Canon":
-    		((DronTerrestre) vObjeto).SetearCanon(false);
-    		break;
-    	case "Vision":
-    		if(((DronTerrestre) vObjeto).ObtenerVision()>0)
-    			((DronTerrestre) vObjeto).SetearVision(((DronTerrestre) vObjeto).ObtenerVision()-1);
-    		break;
-    	case "Blindaje":
-    		if(((DronTerrestre) vObjeto).ObtenerBlindaje()>0)
-    			((DronTerrestre) vObjeto).SetearBlindaje(((DronTerrestre) vObjeto).ObtenerBlindaje()-1);
-    		break;
-     default:
-  }
-		vRespuesta=new JsonParser().parse("Msg:Pego" + vGolpe);
-		return vRespuesta;
+		JsonObject vRespuesta = new JsonObject();
+		vRespuesta.addProperty("tipo","disparoAereo");
+	Objeto vObjeto=vPartida.getObjetos().Find(vIdobjetoTerrestre);
+	
+	vRespuesta.addProperty("IdDronAereo",vIdObjetoAereo);
+	vRespuesta.addProperty("IdDronTerrestre",vObjeto.ObtenerIdObjeto());
+	vRespuesta.addProperty("TipoDisparo",vTipoDisparo);
+	if(vTipoDisparo=="bomba")
+		vRespuesta.addProperty("destruida",true);
+	else{
+			String vGolpe;
+			vGolpe=new Conversor().DronTerrestre((int)(Math.random()*(6))+2);
+				switch (vGolpe) {
+				case "Velocidad":
+		    		if(((DronTerrestre) vObjeto).ObtenerVelocidad()>0)
+		    			((DronTerrestre) vObjeto).SetearVelocidad(((DronTerrestre) vObjeto).ObtenerVelocidad()-1);
+		    		vRespuesta.addProperty("golpe","Velocidad");
+		    		break;
+		    	case "Camara":
+		    		((DronTerrestre) vObjeto).SetearCamara(false);
+		    		vRespuesta.addProperty("golpe","Camara");
+		    		break;
+		    	case "Canon":
+		    		((DronTerrestre) vObjeto).SetearCanon(false);
+		    		vRespuesta.addProperty("golpe","Canon");
+		    		break;
+		    	case "Vision":
+		    		if(((DronTerrestre) vObjeto).ObtenerVision()>0)
+		    			((DronTerrestre) vObjeto).SetearVision(((DronTerrestre) vObjeto).ObtenerVision()-1);
+		    		vRespuesta.addProperty("golpe","Vision");
+		    		break;
+		    	case "Blindaje":
+		    		if(((DronTerrestre) vObjeto).ObtenerBlindaje()>0)
+		    			((DronTerrestre) vObjeto).SetearBlindaje(((DronTerrestre) vObjeto).ObtenerBlindaje()-1);
+		    		vRespuesta.addProperty("golpe","Blindaje");
+		    		break;
+		     default:
+		  }
+	}
+				if(((DronTerrestre) vObjeto).ObtenerVelocidad()==0 && ((DronTerrestre) vObjeto).ObtenerCamara()==false && ((DronTerrestre) vObjeto).ObtenerCanon()==false 
+						&& ((DronTerrestre) vObjeto).ObtenerBlindaje()==0 && ((DronTerrestre) vObjeto).ObtenerVision()==0) 
+						vRespuesta.addProperty("destruida",true);
+				else
+					vRespuesta.addProperty("destruida",false);
+				return vRespuesta;
 	
 }
 
-	public JsonElement TirarBomba(int vIdObjeto){
+	public JsonObject TirarBomba(int vIdObjeto){
 	
-	JsonElement vRespuesta = null;
+		JsonObject vRespuesta = new JsonObject();
+		vRespuesta.addProperty("tipo","TiraBomba");
+		Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
+		vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
+		((DronAereo) vObjeto).SetearTieneBomba(false);
+		vRespuesta.addProperty("Bomba",false);
 	
-	Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
-	((DronAereo) vObjeto).SetearTieneBomba(false);
-	
-	vRespuesta=new JsonParser().parse("Msg:Tiro bomba");
 	return vRespuesta;
 	
 }
