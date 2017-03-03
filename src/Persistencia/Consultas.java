@@ -23,11 +23,13 @@ public class Consultas {
 	}
 	
 	public String BuscarJugador(){
-		return "SELECT JU.NombreJugador,DR.Camara,DR.Cañon,DR.Vision,AE.MotoresActivos,AE.TieneBomba,TE.BlindajeActivo,OB.idObjeto,OB.CoordenadaX,OB.CoordenadaY,OB.Alto,OB.Rotacion,OB.Angulo,OB.Tipo"
-				+ " FROM JUGADOR AS JU INNER JOIN DRON AS DR ON JU.IdJugador=DR.IdJugador AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto AND OB.IdObjeto=DR.IdObjeto"
-				+ " INNER JOIN TERRESTRE AS TE LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN"
-				+ "AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador"
-				+ "WHERE JU.IdJugador= ? AND JU.IdEquipo=? AND JU.IdPartida=?";
+		return "SELECT JU.nombre,DR.camara,DR.canion,DR.vision,DR.velocidad,AE.motoresActivos,AE.tieneBomba,AE.bombaRota,TE.blindajeActivo,OB.idObjeto,OB.coordX,OB.coordY,"
+				+"OB.altura,OB.rotacion,OB.angulo,OB.tipo,OB.ancho "
+				+"FROM JUGADOR AS JU INNER JOIN DRON AS DR ON JU.IdJugador=DR.IdJugador " 
+				+"AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto " 
+				+"AND OB.IdObjeto=DR.IdObjeto LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto " 
+				+"AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador "
+				+"WHERE JU.idJugador=? AND JU.idEquipo=? AND JU.idPartida=?";
 	}
 
 	public String InsertarPartida(){
@@ -84,7 +86,7 @@ public class Consultas {
 	}
 	
 	public String InsertarDron(){
-		return "INSERT INTO DRON (IdObjeto,IdPartida,IdJugador,Camara,Cañon,Vision,Velocidad) VALUES(?,?,?,?,?,?,?)";
+		return "INSERT INTO DRON (idObjeto,idPartida,idJugador,canion,vision,camara,velocidad) VALUES(?,?,?,?,?,?,?)";
 	}
 
 	public String ExisteDron(){
@@ -120,7 +122,7 @@ public class Consultas {
 	}
 	
 	public String InsertarAereos(){
-		return "INSERT INTO AEREO (IdObjeto,IdPartida,IdJugador,MotorActivo,TieneBomba) VALUES(?,?,?,?,?)";
+		return "INSERT INTO AEREO (idObjeto,idPartida,idJugador,tieneBomba,motoresActivos) VALUES(?,?,?,?,?)";
 	}
 	
 	public String ExisteAereo(){

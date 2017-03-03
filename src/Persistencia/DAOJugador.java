@@ -89,7 +89,7 @@ public class DAOJugador {
 	public Jugador DevolverJugador(int IdJugador,int IdEquipo,int IdPartida){
 		
 		Jugador vJugador=null;
-		Drones vDrones=null;
+		Drones vDrones=new Drones();
 		Dron vDron=null;
 
 		try {
@@ -103,31 +103,29 @@ public class DAOJugador {
 			pstmt.setInt(2, IdEquipo);
 			pstmt.setInt(3, IdPartida);
 			ResultSet rs = pstmt.executeQuery();
+			String nombre=null;
 			
-			
-			if(rs.next())
-			{
+
 				while(rs.next())
 				{
-					if(rs.getString("Tipo")=="Aereo")
-						vDron=new DronAereo(rs.getInt("IdObjeto"),rs.getInt("CoordenadaX"),rs.getInt("CoordenadaY"),rs.getInt("Alto"),rs.getInt("Ancho"),rs.getInt("Rotacion"),rs.getInt("Angulo"),
-								rs.getString("Tipo"), 1,rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"),rs.getInt("MotoresActivos"),rs.getBoolean("TieneBomba"),rs.getBoolean("BombaRota"));
+					if(rs.getString("tipo")=="Aereo")
+						vDron=new DronAereo(rs.getInt("idObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),
+								rs.getString("tipo"),rs.getInt("velocidad"),rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"),rs.getInt("motoresActivos"),rs.getBoolean("tieneBomba"),rs.getBoolean("bombaRota"));
 					else
-						vDron=new DronTerrestre(rs.getInt("IdObjeto"),rs.getInt("CoordenadaX"),rs.getInt("CoordenadaY"),rs.getInt("Alto"),rs.getInt("Ancho"),rs.getInt("Rotacion"),rs.getInt("Angulo"),
-								rs.getString("Tipo"),1, rs.getBoolean("Camara"),rs.getBoolean("Cañon"),rs.getInt("Vision"), rs.getInt("BlindajeActivo"));
+						vDron=new DronTerrestre(rs.getInt("IdObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"),rs.getInt("velocidad"), rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"), rs.getInt("blindajeActivo"));
 					
-					 vDrones.insert(rs.getInt("IdObjeto"),vDron);
+					 vDrones.insert(rs.getInt("idObjeto"),vDron);
+					 nombre = rs.getString("nombre");
 				}
 				
-				vJugador=new Jugador(IdJugador,rs.getString("NombreJugador"),vDrones);
-				
-			}	
+			vJugador=new Jugador(IdJugador,nombre,vDrones);
 			rs.close();
 			pstmt.close();
 			con.close();
 			
 			
 		} catch (SQLException e) {
+			System.out.println(e.getErrorCode());
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -138,7 +136,7 @@ public class DAOJugador {
 	
 	public Jugadores DevolverJugadoresEquipo(int IdEquipo,int IdPartida){
 		
-		Jugadores vListaJugadores=null;
+		Jugadores vListaJugadores= new Jugadores();
 		Jugador vJugador=null;
 
 
@@ -154,23 +152,19 @@ public class DAOJugador {
 			ResultSet rs = pstmt.executeQuery();
 			
 			
-			if(rs.next())
-			{
 				while(rs.next())
 				{
 					vJugador=DevolverJugador(rs.getInt("IdJugador"), IdEquipo, IdPartida);
 					vListaJugadores.insert(vJugador);
 				}
 				
-				
-			}	
 			rs.close();
 			pstmt.close();
 			con.close();
 			
 			
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

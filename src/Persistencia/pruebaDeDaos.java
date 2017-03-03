@@ -7,10 +7,15 @@ import java.util.Properties;
 
 import Logica.Base;
 import Logica.Dron;
+import Logica.DronAereo;
+import Logica.DronTerrestre;
 import Logica.Drones;
 import Logica.Equipo;
+import Logica.Jugador;
+import Logica.Jugadores;
 import Logica.Objeto;
 import Logica.Objetos;
+import Logica.Partida;
 
 
 public class pruebaDeDaos {
@@ -73,7 +78,9 @@ public class pruebaDeDaos {
 //				System.out.println("angulo: " + angulo);
 //				System.out.println("tipo: "+objeto.ObtenerTipo());
 				//Prueba del DAO equipo
-////				DAOEquipo daoEquipo = new DAOEquipo(url,user,password);
+//				DAOEquipo daoEquipo = new DAOEquipo(url,user,password);
+//				Equipo equipo = daoEquipo.DevolverEquipo(2,1);
+				
 //				daoEquipo.InsertarEquipo(1,1,"aereo");
 				
 //				if(daoEquipo.ExisteEquipo(2,1))
@@ -99,7 +106,9 @@ public class pruebaDeDaos {
 //				System.out.println(ancho);
 				//Prueba del DAOJugador
 //				DAOJugador daoJugador = new DAOJugador(url,user,password);
-//				//daoJugador.InsertarJugador(1,1,1,"Carlos");
+				//Jugador jugador = daoJugador.DevolverJugador(2,2,1);
+//				Jugadores jugadores = daoJugador.DevolverJugadoresEquipo(2,1);
+//				daoJugador.InsertarJugador(1,1,1,"Carlos");
 //				daoJugador.EliminarJugador(1,1,1);
 //				
 //				
@@ -108,7 +117,8 @@ public class pruebaDeDaos {
 //				else
 //					System.out.println("No existe jugador");
 				
-//				DAOPartida daoPartida = new DAOPartida(url,user,password);
+				DAOPartida daoPartida = new DAOPartida(url,user,password);
+				Partida partida = daoPartida.DevolverPartida(1);
 //
 //				daoPartida.EliminarPartida(1);
 //				
@@ -116,6 +126,8 @@ public class pruebaDeDaos {
 //					System.out.println("Existe partida");
 //				else 
 //					System.out.println("No existe partida");
+				
+				
 				
 //				DAOBase daoBase = new DAOBase(url,user,password);
 //				Base base = new Base(1,10,15,90,90,60,69,"Base",2,3);
@@ -145,15 +157,18 @@ public class pruebaDeDaos {
 //				else
 //					System.out.println("No existe base");
 				
-				DAODron daoDron = new DAODron(url,user,password);
+				//DAODron daoDron = new DAODron(url,user,password);
+				//DronAereo DronAereo = new DronAereo(2,89,60,50,10,50,45,"Dron",3,false,true,2,3,false,true);
+				//daoDron.InsertarDronAereo(DronAereo,1,1);
+				//DronTerrestre dron = new DronTerrestre(3,56,60,70,60,80,20,"dron",5,true,true,1,3);
+				//daoDron.InsertarDronTerrestre(dron,1,2);
 				
+				//Dron dron = new DronTerrestre(1,10,15,90,90,60,69,"Dron",3,true,true,2,4);
+				//daoDron.InsertarDron(dron,1,2);
 				
 				}
 				catch (IOException e) {
 				e.printStackTrace();
 				}		
 	}
-	
-
-	
 }

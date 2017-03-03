@@ -135,6 +135,7 @@ public Partida DevolverPartida(int vIdPartida){
 		
 		
 	} catch (SQLException e) {
+		System.out.println("Error de SQL");
 			
 	} catch (ClassNotFoundException e) {
 		e.printStackTrace();

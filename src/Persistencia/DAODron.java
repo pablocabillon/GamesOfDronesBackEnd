@@ -28,7 +28,7 @@ private String Url, User, Password;
 		this.Password = password;
 	}
 	
-public void InsertarDron(Dron vDron,int vIdObjeto,int vIdPartida,int vIdJugador){ 
+public void InsertarDron(Dron vDron,int vIdPartida,int vIdJugador){ 
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -36,12 +36,12 @@ public void InsertarDron(Dron vDron,int vIdObjeto,int vIdPartida,int vIdJugador)
 			Consultas consultas = new Consultas();
 			String insertarDron = consultas.InsertarDron();
 			PreparedStatement pstmt = con.prepareStatement(insertarDron);
-			pstmt.setInt(1, vIdObjeto);
+			pstmt.setInt(1,vDron.ObtenerIdObjeto());
 			pstmt.setInt(2, vIdPartida);
 			pstmt.setInt(3, vIdJugador);
-			pstmt.setBoolean(4, vDron.ObtenerCamara());
-			pstmt.setBoolean(5, vDron.ObtenerCanon());
-			pstmt.setInt(6, vDron.ObtenerVision());
+			pstmt.setBoolean(4, vDron.ObtenerCanon());
+			pstmt.setInt(5, vDron.ObtenerVision());
+			pstmt.setBoolean(6, vDron.ObtenerCamara());
 			pstmt.setInt(7, vDron.ObtenerVelocidad());
 			pstmt.executeUpdate();
 			pstmt.close();
@@ -50,18 +50,18 @@ public void InsertarDron(Dron vDron,int vIdObjeto,int vIdPartida,int vIdJugador)
 		} catch (ClassNotFoundException e) {
 			e.getMessage();
 		} catch (SQLException e) {
-
+			System.out.println("Hubo un error de SQL");
 		}
 	}
 
-public void InsertarDronAereo(DronAereo vDronAereo,int vIdObjeto,int vIdPartida,int vIdJugador){ 
+public void InsertarDronAereo(DronAereo vDronAereo,int vIdPartida,int vIdJugador){ 
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(Url, User, Password);
 		Consultas consultas = new Consultas();
 		String insertarDronAereo = consultas.InsertarAereos();
 		PreparedStatement pstmt = con.prepareStatement(insertarDronAereo);
-		pstmt.setInt(1, vIdObjeto);
+		pstmt.setInt(1,vDronAereo.ObtenerIdObjeto());
 		pstmt.setInt(2, vIdPartida);
 		pstmt.setInt(3, vIdJugador);
 		pstmt.setInt(4, vDronAereo.ObtenerMotorActivo());
@@ -73,18 +73,18 @@ public void InsertarDronAereo(DronAereo vDronAereo,int vIdObjeto,int vIdPartida,
 	} catch (ClassNotFoundException e) {
 		e.getMessage();
 	} catch (SQLException e) {
-
+		System.out.println("Error de SQL");
 	}
 }
 
-public void InsertarDronTerrestre(DronTerrestre vDronTerrestre,int vIdObjeto,int vIdPartida,int vIdJugador){ 
+public void InsertarDronTerrestre(DronTerrestre vDronTerrestre,int vIdPartida,int vIdJugador){ 
 	try {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(Url, User, Password);
 		Consultas consultas = new Consultas();
 		String insertarDronTerrestre = consultas.InsertarTerrestre();
 		PreparedStatement pstmt = con.prepareStatement(insertarDronTerrestre);
-		pstmt.setInt(1, vIdObjeto);
+		pstmt.setInt(1, vDronTerrestre.ObtenerIdObjeto());
 		pstmt.setInt(2, vIdPartida);
 		pstmt.setInt(3, vIdJugador);
 		pstmt.setInt(4, vDronTerrestre.ObtenerBlindaje());

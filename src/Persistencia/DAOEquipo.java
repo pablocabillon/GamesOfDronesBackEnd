@@ -126,17 +126,18 @@ public class DAOEquipo {
 			
 			if(rs.next())
 			{
-				vEquipo=new Equipo(rs.getInt("IdEquipo"),rs.getString("NombreEquipo"), vJugadores);
+				vEquipo=new Equipo(rs.getInt("idEquipo"),rs.getString("nombre"), vJugadores);
 				vJugadores=new DAOJugador(Url,User,Password).DevolverJugadoresEquipo(vIdEquipo,vIdPartida);
-				vEquipo.SetearJugadores(vJugadores);
+				
 			}	
+			vEquipo.SetearJugadores(vJugadores);
 			rs.close();
 			pstmt.close();
 			con.close();
 			
 			
 		} catch (SQLException e) {
-
+			System.out.println("Error de SQL");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -148,7 +149,7 @@ public Equipos DevolverEquiposPArtida(int vIdPartida){
 		
 
 		Equipo vEquipo=null;
-		Equipos vEquipos=null;
+		Equipos vEquipos= new Equipos();
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
