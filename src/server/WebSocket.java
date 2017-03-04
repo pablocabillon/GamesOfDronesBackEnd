@@ -21,6 +21,7 @@ import Logica.Fachada;
 
 
 @ServerEndpoint("/websocket")
+
 public class WebSocket {
 	
 	static final Logger LOGGER = Logger.getLogger(WebSocket.class.getName());
@@ -30,31 +31,29 @@ public class WebSocket {
 	private Fachada vFachada=new Fachada(); 
 	
 	private int vCantidadJugadoresPartida=0;
+
 	
-	private int vIdDronAereo=0;
-	
-	private int vIdDronTerrestre=0;
 	
 	@OnMessage
 	public void onMessage(String mensaje, Session sesion) throws IOException {
 	
 		JsonElement jelement = new JsonParser().parse(mensaje);
 		String vTipo = jelement.getAsJsonObject().get("tipo").toString();
-		JsonObject vRespuesta=null;
-		
+		JsonObject vRespuesta = null;
 		switch(vTipo){
-		case "MueveAereo":
-		case "MueveTerrestre":
+		case "\"MueveAereo\"":
+		case "\"MueveTerrestre\"":
 			 vRespuesta = jelement.getAsJsonObject();
 			 synchronized(conexiones){
 		      for(Session client : conexiones){
-		        if (!client.equals(sesion)){
+		        if (client.equals(sesion)){
 		            client.getBasicRemote().sendText(vRespuesta.toString());
 		        }
 		      }
 			 }
-			break;
-		case "crearPartida":
+		
+		break;
+		case "\"crearPartida\"":
 			    int vCantJugadores=jelement.getAsJsonObject().get("jugadores").getAsInt();
 			    vCantidadJugadoresPartida=vCantJugadores;
 				vRespuesta=vFachada.CrearPartida(vCantJugadores);
@@ -66,25 +65,26 @@ public class WebSocket {
 			      }
 				 }
 			break;
-		case "unirPartida":
-				if(jelement.getAsJsonObject().get("equipo").toString()=="aereo"){
+		case "\"UnirPartida\"":
+			String vEquipo=jelement.getAsJsonObject().get("equipo").toString();
+				if(vEquipo.equals("\"aereo\"")){
 						if(vCantidadJugadoresPartida==4){
-							vIdDronAereo=vIdDronAereo+1;
-							vRespuesta=vFachada.UnirsePartidaAereo(jelement.getAsJsonObject().get("nombreJugador").toString(),vIdDronAereo,0);
+							String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+							vRespuesta=vFachada.UnirsePartidaAereo(vNombre,vCantidadJugadoresPartida);
 						}
 						else{
-							vIdDronAereo=vIdDronAereo+2;
-							vRespuesta=vFachada.UnirsePartidaAereo(jelement.getAsJsonObject().get("nombreJugador").toString(),1,2);
+							String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+							vRespuesta=vFachada.UnirsePartidaAereo(vNombre,vCantidadJugadoresPartida);
 						}
 				}
 				else{
 					if(vCantidadJugadoresPartida==4){
-						vIdDronTerrestre=vIdDronTerrestre+1;
-						vRespuesta=vFachada.UnirsePartidaTerrestre(jelement.getAsJsonObject().get("nombreJugador").toString(),vIdDronTerrestre,0);
+						String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+						vRespuesta=vFachada.UnirsePartidaTerrestre(vNombre,vCantidadJugadoresPartida);
 					}
 					else{
-						vIdDronTerrestre=vIdDronTerrestre+2;
-						vRespuesta=vFachada.UnirsePartidaTerrestre(jelement.getAsJsonObject().get("nombreJugador").toString(),1,2);
+						String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+						vRespuesta=vFachada.UnirsePartidaTerrestre(vNombre,vCantidadJugadoresPartida);
 					}
 					
 					
@@ -98,11 +98,11 @@ public class WebSocket {
 				}
 			break;
 			
-		case "guardarPartida":
+		case "\"guardarPartida\"":
 			
 			break;
 			
-		case "disparoBase":
+		case "\"disparoBase\"":
 				vRespuesta=vFachada.DisparaBase(jelement.getAsJsonObject().get("IdBase").getAsInt(), jelement.getAsJsonObject().get("sector").toString());
 				synchronized(conexiones){
 				for(Session client : conexiones){
@@ -111,7 +111,7 @@ public class WebSocket {
 			   }
 				break;
 			
-		case "disparoAereo":
+		case "\"disparoAereo\"":
 				vRespuesta=vFachada.GolpeDronTerrestre(jelement.getAsJsonObject().get("IdDronAereo").getAsInt(),jelement.getAsJsonObject().get("IdDronTerrestre").getAsInt(),jelement.getAsJsonObject().get("tipoDisparo").toString());
 					
 				synchronized(conexiones){
@@ -121,7 +121,7 @@ public class WebSocket {
 				   }
 			break;
 			
-		case "disparoTerrestre":
+		case "\"disparoTerrestre\"":
 				vRespuesta=vFachada.GolpeDronAereo(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 				synchronized(conexiones){
 					for(Session client : conexiones){
@@ -130,7 +130,7 @@ public class WebSocket {
 				   }
 			break;
 			
-		case "TiraBomba":
+		case "\"TiraBomba\"":
 			vRespuesta=vFachada.TirarBomba(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 			synchronized(conexiones){
 				for(Session client : conexiones){
