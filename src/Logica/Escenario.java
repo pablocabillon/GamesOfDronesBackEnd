@@ -17,10 +17,8 @@ public class Escenario {
 	public enum Escenarios{Escenario1,Escenario2,Escenario3};
 	
 	
-	public Escenarios EscenarioAleatorio(){
-		Escenarios[] Escenario = Escenarios.values();
-	    Random generator = new Random();
-	    return Escenario[generator.nextInt(Escenario.length)];
+	public int EscenarioAleatorio(){
+	    return (int)(Math.random()*(3))+1;
 	    }
 
 }

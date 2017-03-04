@@ -135,18 +135,18 @@ public class Objeto {
 		Boolean vBombaRota=false;
 		int vBlindajeActivo=4;
 		if(vTipo=="Base"){
-			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxBase-CoordinadaXMinBase))+CoordinadaXMinBase;
-			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxBase-CoordinadaYMinBase))+CoordinadaYMinBase;
+			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxBase-CoordinadaXMinBase+1))+CoordinadaXMinBase;
+			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxBase-CoordinadaYMinBase+1))+CoordinadaYMinBase;
 			vObjeto=new Base(vIdObjeto, vCoordenadaX, vCoordenadaY, 0, 0, 0, 0, "Base", vVidaZonaPolvorin, vVidaZonaDespegue);
 		}
 		if(vTipo=="Aereo"){
-			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxAereo-CoordinadaXMinAereo))+CoordinadaXMinAereo;
-			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxAereo-CoordinadaYMinAereo))+CoordinadaYMinAereo;
+			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxAereo-CoordinadaXMinAereo+1))+CoordinadaXMinAereo;
+			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxAereo-CoordinadaYMinAereo+1))+CoordinadaYMinAereo;
 			vObjeto=new DronAereo(vIdObjeto, vCoordenadaX, vCoordenadaY, 0, 0, 0, 0,  "Aereo", vVelocidad, vCamara, vCanon, vVision, vMotoresActivos, vTieneBomba, vBombaRota);
 		}
 		if(vTipo=="Terrestre"){
-			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxTerrestre-CoordinadaXMinTerrestre))+CoordinadaXMinTerrestre;
-			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxTerrestre-CoordinadaYMinTerrestre))+CoordinadaYMinTerrestre;
+			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxTerrestre-CoordinadaXMinTerrestre+1))+CoordinadaXMinTerrestre;
+			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxTerrestre-CoordinadaYMinTerrestre+1))+CoordinadaYMinTerrestre;
 		vObjeto=new DronTerrestre(vIdObjeto, vCoordenadaX, vCoordenadaY, 0, 0, 0, 0,  "Terrestre", vVelocidad, vCamara, vCanon, vVision, vBlindajeActivo);
 		}
 		
