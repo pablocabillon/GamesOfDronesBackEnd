@@ -88,13 +88,24 @@ public class WebSocket {
 					}
 					
 					
-				}	
+				}
 				synchronized(conexiones){
-				for(Session client : conexiones){
-			        if (client.equals(sesion)){
-			            client.getBasicRemote().sendText(vRespuesta.toString());
-			        }
-			      }
+					for(Session client : conexiones){
+				        if (client.equals(sesion)){
+				            client.getBasicRemote().sendText(vRespuesta.toString());
+				        }
+				      }
+					}
+				JsonElement vElement=new JsonParser().parse(vRespuesta.toString());
+				String vRetono=vElement.getAsJsonObject().get("retorno").toString();
+				if(vRetono.equals("\"iniciar\"")){
+					JsonObject vRespuestaIniciar = new JsonObject();
+					vRespuestaIniciar.addProperty("tipo", "IniciarPartida");
+					synchronized(conexiones){
+					for(Session client : conexiones){
+				            client.getBasicRemote().sendText(vRespuestaIniciar.toString());
+				      }
+					}
 				}
 			break;
 			
