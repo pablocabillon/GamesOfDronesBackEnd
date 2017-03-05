@@ -40,6 +40,8 @@ public class Fachada {
 	
 	private static int vCantJugadores;
 	
+	private static int vCantJugadoresPartidaActual=0;
+	
 	private static int vCantJugadoresAereo;
 	
 	private static int vCantJugadoresTerrestre;
@@ -91,6 +93,7 @@ public class Fachada {
 			vPartida=new Partida(vEquipos, vEscenario, vObjetos, vCantidadJugadores);
 			vIdPArtidaActual=vIdPArtidaActual+1;
 			vCantJugadores=vCantidadJugadores;
+			vCantJugadoresPartidaActual=vCantidadJugadores;
 			if(vCantidadJugadores==4){
 				vCantJugadoresAereo=2;
 				vCantJugadoresTerrestre=2;
@@ -111,7 +114,7 @@ public class Fachada {
 		return vRespuesta;
 	}
 	
-	public JsonObject UnirsePartidaAereo(String vNombreJugador,int vCantidadJugadores){
+	public JsonObject UnirsePartidaAereo(String vNombreJugador){
 		
 		JsonObject vRespuesta = new JsonObject();
 		Drones vDrones=new Drones();
@@ -131,7 +134,7 @@ public class Fachada {
 			vRespuesta.addProperty("retorno", "Ya se encuentra la totalidad de jugadores del grupo.");
 			return vRespuesta;
 		}
-	   else if(vCantidadJugadores==4){
+	   else if(vCantJugadoresPartidaActual==4){
 				vIdJugadorAereo=vIdJugadorAereo+1;
 				vIdObjeto=vIdObjeto+1;
 				vDron=(Dron) new Objeto().GenerarObjeto(vIdObjeto, "Aereo");
@@ -178,7 +181,7 @@ public class Fachada {
 		return vRespuesta;
 	}
 
-	public JsonObject UnirsePartidaTerrestre(String vNombreJugador,int vCantidadJugadores){
+	public JsonObject UnirsePartidaTerrestre(String vNombreJugador){
 		
 		JsonObject vRespuesta = new JsonObject();
 		Drones vDrones=new Drones();
@@ -197,7 +200,7 @@ public class Fachada {
 			vRespuesta.addProperty("retorno", "Ya se encuentra la totalidad de jugadores del grupo.");
 			return vRespuesta;
 		}
-	   else if(vCantidadJugadores==4){
+	   else if(vCantJugadoresPartidaActual==4){
 		    vIdJugadorTerrestre=vIdJugadorTerrestre+1;
 			vIdObjeto=vIdObjeto+1;
 			vDron=(Dron) new Objeto().GenerarObjeto(vIdObjeto, "Terrestre");
