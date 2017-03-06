@@ -23,10 +23,10 @@ public class Objeto {
 	private static final  int CoordinadaYMaxAereo=450;
 	private static final  int CoordinadaYMinAereo=10;
 	
-	private static final  int CoordinadaXMinTerrestre=1200;
-	private static final  int CoordinadaXMaxTerrestre=1500;
-	private static final  int CoordinadaYMaxTerrestre=1500;
-	private static final  int CoordinadaYMinTerrestre=1200;
+	private static final  int CoordinadaXMinTerrestre=2000;
+	private static final  int CoordinadaXMaxTerrestre=2500;
+	private static final  int CoordinadaYMaxTerrestre=2000;
+	private static final  int CoordinadaYMinTerrestre=2500;
 	
 	
 	private static final  int CoordinadaXMinBase=10;
