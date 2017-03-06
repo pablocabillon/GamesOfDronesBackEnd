@@ -86,8 +86,7 @@ public class WebSocket {
 				JsonElement vElement=new JsonParser().parse(vRespuesta.toString());
 				String vRetono=vElement.getAsJsonObject().get("retorno").toString();
 				if(vRetono.equals("\"iniciar\"")){
-					JsonObject vRespuestaIniciar = new JsonObject();
-					vRespuestaIniciar.addProperty("tipo", "IniciarPartida");
+					JsonObject vRespuestaIniciar = vFachada.IniciarPartida();
 					synchronized(conexiones){
 					for(Session client : conexiones){
 				            client.getBasicRemote().sendText(vRespuestaIniciar.toString());
