@@ -381,6 +381,10 @@ public class Fachada {
 		
 		vIdObjeto=0;
 		
+		vIdObjetoAereo=1;
+		
+		vIdObjetoTerrestre=1;
+		
 		ArrayList<Jugador> vListaJugadores=new ArrayList<>();
 	}
 	
