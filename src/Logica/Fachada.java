@@ -282,8 +282,6 @@ public class Fachada {
 	
 	public JsonObject IniciarPartida(){
 		JsonObject vRespuesta = new JsonObject();
-		Equipo j1=vPartida.getEquipos().Find(1);
-		//Objeto ob1= j1.ObtenerColeccionDrones().find(2);
 		vRespuesta.addProperty("tipo", "IniciarPartida");
 		vRespuesta.addProperty("IdAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2).ObtenerIdObjeto());
 		vRespuesta.addProperty("XAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2).ObtenerCoordenadaX());
