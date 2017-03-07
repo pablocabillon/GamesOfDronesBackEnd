@@ -46,7 +46,7 @@ public class WebSocket {
 			 vRespuesta = jelement.getAsJsonObject();
 			 synchronized(conexiones){
 		      for(Session client : conexiones){
-		        if (client.equals(sesion)){
+		        if (!client.equals(sesion)){
 		            client.getBasicRemote().sendText(vRespuesta.toString());
 		        }
 		      }
