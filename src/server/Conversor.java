@@ -9,7 +9,7 @@ public String DronAereo (int vCodigo) {
 		
 		switch (vCodigo) {
 	    	case 1:
-	    		vNombre = "Velocidad";
+	    		vNombre = "Bomba";
 	    		break;
 	    	case 2:
 	    		vNombre = "Camara";
@@ -18,13 +18,7 @@ public String DronAereo (int vCodigo) {
 	    		vNombre = "Canon";
 	    		break;
 	    	case 4:
-	    		vNombre = "Vision";
-	    		break;
-	    	case 5:
 	    		vNombre = "Motores";
-	    		break;
-	    	case 6:
-	    		vNombre = "Bomba";
 	    		break;
 	     default:
 	  }
@@ -37,19 +31,13 @@ public String DronTerrestre (int vCodigo) {
 	
 	switch (vCodigo) {
     	case 1:
-    		vNombre = "Velocidad";
+    		vNombre = "Blindaje";
     		break;
     	case 2:
     		vNombre = "Camara";
     		break;
     	case 3:
     		vNombre = "Canon";
-    		break;
-    	case 4:
-    		vNombre = "Vision";
-    		break;
-    	case 5:
-    		vNombre = "Blindaje";
     		break;
      default:
   }

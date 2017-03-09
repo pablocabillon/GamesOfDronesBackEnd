@@ -94,10 +94,13 @@ public class Fachada {
 			vEquipos.insert(1, vEquipo1);
 			vEquipos.insert(2, vEquipo2);
 			Objetos vObjetos=new Objetos();
-			vIdObjeto=vIdObjeto+1;
-			Objeto vBase=new Objeto().GenerarObjeto(vIdObjeto, "Base");
-			vObjetos.insert(vBase.ObtenerIdObjeto(), vBase);//Generarlo con IdObjeto 1
-			int vEscenario=new Escenario().EscenarioAleatorio();//verificar
+			Objeto vBase=new Objeto().GenerarObjeto(0, "Base");
+			Objeto vBase1=new Objeto().GenerarObjeto(1, "Base");;
+			vBase1.SetearCoordenadaY(vBase.ObtenerCoordenadaY()+150);
+			vBase1.SetearCoordenadaX(vBase.ObtenerCoordenadaX());
+			vObjetos.insert(vBase.ObtenerIdObjeto(), vBase);
+			vObjetos.insert(vBase1.ObtenerIdObjeto(), vBase1);
+			int vEscenario=new Escenario().EscenarioAleatorio();
 			vIdEscenarioPArtidaActual=vEscenario;
 			vPartida=new Partida(vEquipos, vEscenario, vObjetos, vCantidadJugadores);
 			vIdPArtidaActual=vIdPArtidaActual+1;
@@ -114,9 +117,6 @@ public class Fachada {
 			}
 			vRespuesta.addProperty("tipo","crearPartida");
 			vRespuesta.addProperty("retorno","ok");	
-			vRespuesta.addProperty("BaseX",vBase.ObtenerCoordenadaX());
-			vRespuesta.addProperty("BaseY",vBase.ObtenerCoordenadaY());
-			vRespuesta.addProperty("ID",vBase.ObtenerIdObjeto());
 		}
 		
 		return vRespuesta;
@@ -283,28 +283,69 @@ public class Fachada {
 	public JsonObject IniciarPartida(){
 		JsonObject vRespuesta = new JsonObject();
 		vRespuesta.addProperty("tipo", "IniciarPartida");
-		vRespuesta.addProperty("IdAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2).ObtenerIdObjeto());
-		vRespuesta.addProperty("XAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2).ObtenerCoordenadaX());
-		vRespuesta.addProperty("YAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2).ObtenerCoordenadaY());
-		vRespuesta.addProperty("IdTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4).ObtenerIdObjeto());
-		vRespuesta.addProperty("XTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4).ObtenerCoordenadaX());
-		vRespuesta.addProperty("YTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4).ObtenerCoordenadaY());
-		if(vCantJugadoresPartidaActual==4){
-			vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3).ObtenerIdObjeto());
-			vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3).ObtenerCoordenadaX());
-			vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3).ObtenerCoordenadaY());
-			vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5).ObtenerIdObjeto());
-			vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5).ObtenerCoordenadaX());
-			vRespuesta.addProperty("YTerrestre2",  vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5).ObtenerCoordenadaY());
+		vRespuesta.addProperty("IdBase1", vPartida.getObjetos().Find(0).ObtenerIdObjeto());
+		vRespuesta.addProperty("XBAse1", vPartida.getObjetos().Find(0).ObtenerCoordenadaX());
+		vRespuesta.addProperty("YBase1", vPartida.getObjetos().Find(0).ObtenerCoordenadaY());
+		vRespuesta.addProperty("IdBase2", vPartida.getObjetos().Find(1).ObtenerIdObjeto());
+		vRespuesta.addProperty("XBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaX());
+		vRespuesta.addProperty("YBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaY());
+		int vIndice=0;
+		for(int i=0;i<6;i++)
+		{
 			
-		}else{
-			vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3).ObtenerIdObjeto());
-			vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3).ObtenerCoordenadaX());
-			vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3).ObtenerCoordenadaY());
-			vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5).ObtenerIdObjeto());
-			vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5).ObtenerCoordenadaX());
-			vRespuesta.addProperty("YTerrestre2",  vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5).ObtenerCoordenadaY());
+			if(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i)!=null){
+				if(vIndice==0){
+				vRespuesta.addProperty("IdAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+				vIndice++;
+				}else{
+				vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+				}
+			}
 		}
+		vIndice=0;
+		for(int i=0;i<6;i++)
+		{
+			if(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i)!=null){
+				if(vIndice==0){
+				vRespuesta.addProperty("IdTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+				vIndice++;
+				}else{
+				vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+					
+				}
+			}
+	
+		}
+		if(vCantJugadoresPartidaActual==4){
+			for(int i=0;i<6;i++)
+			{
+				if(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i)!=null){
+					vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+					vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+					vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+				}
+		
+			}
+			for(int i=0;i<6;i++)
+			{
+				if(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i)!=null){
+					vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+					vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+					vRespuesta.addProperty("YTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+				}
+		
+			}
+			
+		}
+
 
 		return vRespuesta;
 		
@@ -432,7 +473,7 @@ public class Fachada {
 	    	case "\"polvorin\"":
 	    		((Base) vObjeto).SetearVidaZonaPolvorin(((Base) vObjeto).ObtenerVidaZonaPolvorin()-1);
 	    		break;
-	    	case "\"despuegue\"":
+	    	case "\"despegue\"":
 	    		((Base) vObjeto).SetearVidaZonaDespegue(((Base) vObjeto).ObtenerVidaZonaDespegue()-1);
 	    		break;
 		     default:
@@ -455,13 +496,8 @@ public class Fachada {
 		
 		vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
 		String vGolpe;
-			vGolpe=new Conversor().DronAereo((int)(Math.random()*(6))+1);
+			vGolpe=new Conversor().DronAereo((int)(Math.random()*(4))+1);
 			switch (vGolpe) {
-	    	case "Velocidad":
-	    		if(((DronAereo) vObjeto).ObtenerVelocidad()>0)
-	    			((DronAereo) vObjeto).SetearVelocidad(((DronAereo) vObjeto).ObtenerVelocidad()-1);
-	    		vRespuesta.addProperty("golpe","Velocidad");
-	    		break;
 	    	case "Camara":
 	    		((DronAereo) vObjeto).SetearCamara(false);
 	    		vRespuesta.addProperty("golpe","Camara");
@@ -469,11 +505,6 @@ public class Fachada {
 	    	case "Canon":
 	    		((DronAereo) vObjeto).SetearCanon(false);
 	    		vRespuesta.addProperty("golpe","Canon");
-	    		break;
-	    	case "Vision":
-	    		if(((DronAereo) vObjeto).ObtenerVision()>0)
-	    			((DronAereo) vObjeto).SetearVision(((DronAereo) vObjeto).ObtenerVision()-1);
-	    		vRespuesta.addProperty("golpe","Vision");
 	    		break;
 	    	case "Motores":
 	    		if(((DronAereo) vObjeto).ObtenerMotorActivo()>0)
@@ -486,8 +517,8 @@ public class Fachada {
 	    		break;
 	     default:
 	  }
-			if(((DronAereo) vObjeto).ObtenerVelocidad()==0 && ((DronAereo) vObjeto).ObtenerCamara()==false && ((DronAereo) vObjeto).ObtenerCanon()==false 
-					&& ((DronAereo) vObjeto).ObtenerMotorActivo()==0 && ((DronAereo) vObjeto).ObtenerVision()==0) 
+			if(((DronAereo) vObjeto).ObtenerCamara()==false && ((DronAereo) vObjeto).ObtenerCanon()==false 
+					&& ((DronAereo) vObjeto).ObtenerMotorActivo()==0) 
 					vRespuesta.addProperty("destruida",true);
 			else if(((DronAereo) vObjeto).ObtenerBombaRota()==true)
 					vRespuesta.addProperty("destruida",true);
@@ -514,13 +545,8 @@ public class Fachada {
 	}
 	vRespuesta.addProperty("TipoDisparo",vTipoDisparo);
 	String vGolpe;
-			vGolpe=new Conversor().DronTerrestre((int)(Math.random()*(5))+1);
+			vGolpe=new Conversor().DronTerrestre((int)(Math.random()*(3))+1);
 				switch (vGolpe) {
-				case "Velocidad":
-		    		if(((DronTerrestre) vObjeto).ObtenerVelocidad()>0)
-		    			((DronTerrestre) vObjeto).SetearVelocidad(((DronTerrestre) vObjeto).ObtenerVelocidad()-1);
-		    		vRespuesta.addProperty("golpe","Velocidad");
-		    		break;
 		    	case "Camara":
 		    		((DronTerrestre) vObjeto).SetearCamara(false);
 		    		vRespuesta.addProperty("golpe","Camara");
@@ -529,11 +555,6 @@ public class Fachada {
 		    		((DronTerrestre) vObjeto).SetearCanon(false);
 		    		vRespuesta.addProperty("golpe","Canon");
 		    		break;
-		    	case "Vision":
-		    		if(((DronTerrestre) vObjeto).ObtenerVision()>0)
-		    			((DronTerrestre) vObjeto).SetearVision(((DronTerrestre) vObjeto).ObtenerVision()-1);
-		    		vRespuesta.addProperty("golpe","Vision");
-		    		break;
 		    	case "Blindaje":
 		    		if(((DronTerrestre) vObjeto).ObtenerBlindaje()>0)
 		    			((DronTerrestre) vObjeto).SetearBlindaje(((DronTerrestre) vObjeto).ObtenerBlindaje()-1);
@@ -541,8 +562,8 @@ public class Fachada {
 		    		break;
 		     default:
 		  }
-				if(((DronTerrestre) vObjeto).ObtenerVelocidad()==0 && ((DronTerrestre) vObjeto).ObtenerCamara()==false && ((DronTerrestre) vObjeto).ObtenerCanon()==false 
-						&& ((DronTerrestre) vObjeto).ObtenerBlindaje()==0 && ((DronTerrestre) vObjeto).ObtenerVision()==0) 
+				if(((DronTerrestre) vObjeto).ObtenerCamara()==false && ((DronTerrestre) vObjeto).ObtenerCanon()==false 
+						&& ((DronTerrestre) vObjeto).ObtenerBlindaje()==0) 
 						vRespuesta.addProperty("destruida",true);
 				else if (vTipoDisparo.equals("bomba"))
 					vRespuesta.addProperty("destruida",true);

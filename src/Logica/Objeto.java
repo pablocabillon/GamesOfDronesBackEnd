@@ -87,6 +87,11 @@ public class Objeto {
 	{
 		return Tipo;
 	}
+	
+	public void SetearID(int vIdObjeto)
+	{
+		this.IdObjeto=vIdObjeto;
+	}
 	public void SetearCoordenadaX(int vCoordenadaX)
 	{
 		this.CoordenadaX=vCoordenadaX;
@@ -130,10 +135,10 @@ public class Objeto {
 		Boolean vCamara=true;
 		Boolean vCanon=true;
 		int vVision=1;
-		int vMotoresActivos=4;
+		int vMotoresActivos=2;
 		Boolean vTieneBomba=true;
 		Boolean vBombaRota=false;
-		int vBlindajeActivo=4;
+		int vBlindajeActivo=3;
 		if(vTipo=="Base"){
 			vCoordenadaX= (int)(Math.random()*(CoordinadaXMaxBase-CoordinadaXMinBase+1))+CoordinadaXMinBase;
 			vCoordenadaY= (int)(Math.random()*(CoordinadaYMaxBase-CoordinadaYMinBase+1))+CoordinadaYMinBase;
