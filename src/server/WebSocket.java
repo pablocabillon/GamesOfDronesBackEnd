@@ -43,6 +43,7 @@ public class WebSocket {
 		switch(vTipo){
 		case "\"MueveAereo\"":
 		case "\"MueveTerrestre\"":
+		case "\"DisparoFallido\"":
 			 vRespuesta = jelement.getAsJsonObject();
 			 synchronized(conexiones){
 		      for(Session client : conexiones){
@@ -113,8 +114,10 @@ public class WebSocket {
 					
 				synchronized(conexiones){
 					for(Session client : conexiones){
+						if (!client.equals(sesion)){
 				            client.getBasicRemote().sendText(vRespuesta.toString());
 				        }
+					}    
 				   }
 			break;
 			
@@ -122,8 +125,10 @@ public class WebSocket {
 				vRespuesta=vFachada.GolpeDronAereo(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 				synchronized(conexiones){
 					for(Session client : conexiones){
+						if (!client.equals(sesion)){
 				            client.getBasicRemote().sendText(vRespuesta.toString());
 				        }
+					}    
 				   }
 			break;
 			
@@ -131,8 +136,10 @@ public class WebSocket {
 			vRespuesta=vFachada.TirarBomba(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 			synchronized(conexiones){
 				for(Session client : conexiones){
+					if (!client.equals(sesion)){
 			            client.getBasicRemote().sendText(vRespuesta.toString());
 			        }
+				}    
 			   }
 			break;
 			
@@ -155,6 +162,8 @@ public class WebSocket {
 	            LOGGER.log(Level.INFO, "Terminando la conexion de {0}", session.getId());
 	            session.close(); //se cierra la conexión
 	            conexiones.remove(session); // se retira de la lista
+	            if(conexiones.size()==0)
+	            		vFachada.ResetearDatos();
 	        } catch (IOException ex) {
 	            LOGGER.log(Level.SEVERE, null, ex);
 	        }

@@ -183,8 +183,6 @@ public class Fachada {
 			if(vCantJugadores==0){ 
 				vRespuesta.addProperty("tipo", "UnirPartida");
 				vRespuesta.addProperty("retorno","iniciar");
-				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
-				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
 				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
 				vRespuesta.addProperty("Escenario",vIdEscenarioPArtidaActual);	
 				
@@ -192,8 +190,6 @@ public class Fachada {
 			else{
 				vRespuesta.addProperty("tipo", "UnirPartida");
 				vRespuesta.addProperty("retorno","esperar");
-				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
-				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
 				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
 				vRespuesta.addProperty("Escenario",vIdEscenarioPArtidaActual);	
 				
@@ -260,8 +256,6 @@ public class Fachada {
 			if(vCantJugadores==0){
 				vRespuesta.addProperty("tipo", "UnirPartida");
 				vRespuesta.addProperty("retorno","iniciar");
-				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
-				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
 				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
 				vRespuesta.addProperty("Escenario",vIdEscenarioPArtidaActual);	
 				
@@ -269,8 +263,6 @@ public class Fachada {
 			else{
 				vRespuesta.addProperty("tipo", "UnirPartida");
 				vRespuesta.addProperty("retorno","esperar");
-				vRespuesta.addProperty("DronX", vDron.ObtenerCoordenadaX());
-				vRespuesta.addProperty("DronY", vDron.ObtenerCoordenadaY());
 				vRespuesta.addProperty("DronId",vDron.ObtenerIdObjeto());
 				vRespuesta.addProperty("Escenario",vIdEscenarioPArtidaActual);	
 				
@@ -283,10 +275,8 @@ public class Fachada {
 	public JsonObject IniciarPartida(){
 		JsonObject vRespuesta = new JsonObject();
 		vRespuesta.addProperty("tipo", "IniciarPartida");
-		vRespuesta.addProperty("IdBase1", vPartida.getObjetos().Find(0).ObtenerIdObjeto());
-		vRespuesta.addProperty("XBAse1", vPartida.getObjetos().Find(0).ObtenerCoordenadaX());
+		vRespuesta.addProperty("XBase1", vPartida.getObjetos().Find(0).ObtenerCoordenadaX());
 		vRespuesta.addProperty("YBase1", vPartida.getObjetos().Find(0).ObtenerCoordenadaY());
-		vRespuesta.addProperty("IdBase2", vPartida.getObjetos().Find(1).ObtenerIdObjeto());
 		vRespuesta.addProperty("XBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaX());
 		vRespuesta.addProperty("YBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaY());
 		int vIndice=0;
