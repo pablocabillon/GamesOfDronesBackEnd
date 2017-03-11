@@ -66,6 +66,7 @@ public void InsertarDronAereo(DronAereo vDronAereo,int vIdPartida,int vIdJugador
 		pstmt.setInt(3, vIdJugador);
 		pstmt.setInt(4, vDronAereo.ObtenerMotorActivo());
 		pstmt.setBoolean(5, vDronAereo.ObtenerTieneBomba());
+		pstmt.setBoolean(6, vDronAereo.ObtenerBombaRota());
 		pstmt.executeUpdate();
 		pstmt.close();
 		con.close();
@@ -99,7 +100,65 @@ public void InsertarDronTerrestre(DronTerrestre vDronTerrestre,int vIdPartida,in
 	}
 }
 
+public void EliminarDron(Objeto vDron,int vIdPartida){ 
+	try {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(Url, User, Password);
+		Consultas consultas = new Consultas();
+		String eliminarDron = consultas.EliminarDron();
+		PreparedStatement pstmt = con.prepareStatement(eliminarDron);
+		pstmt.setInt(1,vDron.ObtenerIdObjeto());
+		pstmt.setInt(2, vIdPartida);
+		pstmt.executeUpdate();
+		pstmt.close();
+		con.close();
+		
+	} catch (ClassNotFoundException e) {
+		e.getMessage();
+	} catch (SQLException e) {
+		System.out.println("Error de SQL");
+	}
+}
 
+public void EliminarDronAereo(Dron vDronAereo,int vIdPartida){ 
+	try {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(Url, User, Password);
+		Consultas consultas = new Consultas();
+		String eliminarDronAereo = consultas.EliminarAereo();
+		PreparedStatement pstmt = con.prepareStatement(eliminarDronAereo);
+		pstmt.setInt(1,vDronAereo.ObtenerIdObjeto());
+		pstmt.setInt(2, vIdPartida);
+		pstmt.executeUpdate();
+		pstmt.close();
+		con.close();
+		
+	} catch (ClassNotFoundException e) {
+		e.getMessage();
+	} catch (SQLException e) {
+		System.out.println("Error de SQL");
+	}
+}
+
+public void EliminarDronTerrestre(Objeto vDronTerrestre,int vIdPartida){ 
+	try {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(Url, User, Password);
+		Consultas consultas = new Consultas();
+		String eliminarDronTerrestre = consultas.EliminarTerrestre();
+		PreparedStatement pstmt = con.prepareStatement(eliminarDronTerrestre);
+		pstmt.setInt(1,vDronTerrestre.ObtenerIdObjeto());
+		pstmt.setInt(2, vIdPartida);
+		pstmt.executeUpdate();
+		pstmt.close();
+		con.close();
+		
+	} catch (ClassNotFoundException e) {
+		e.getMessage();
+	} catch (SQLException e) {
+		System.out.println("Error de SQL");
+	}
+}
 
 
 }

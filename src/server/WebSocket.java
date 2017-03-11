@@ -1,6 +1,7 @@
 package server;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class WebSocket {
 	
 	
 	@OnMessage
-	public void onMessage(String mensaje, Session sesion) throws IOException {
+	public void onMessage(String mensaje, Session sesion) throws IOException, SQLException {
 	
 		JsonElement jelement = new JsonParser().parse(mensaje);
 		String vTipo = jelement.getAsJsonObject().get("tipo").toString();
@@ -97,9 +98,35 @@ public class WebSocket {
 			break;
 			
 		case "\"guardarPartida\"":
-			
+				vRespuesta=vFachada.GuardarPartida(jelement);
+				synchronized(conexiones){
+					for(Session client : conexiones){
+				            client.getBasicRemote().sendText(vRespuesta.toString());
+				        }
+				   }
 			break;
-			
+		case "\"reanudarPartida\"":
+			vRespuesta=vFachada.ReanudarPartida(jelement.getAsJsonObject().get("nombreJugador").toString());
+			synchronized(conexiones){
+				for(Session client : conexiones){
+					 if (client.equals(sesion)){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+					 }
+			        }
+			   }
+			JsonElement vElement1=new JsonParser().parse(vRespuesta.toString());
+			String vRetono1=vElement1.getAsJsonObject().get("retorno").toString();
+			if(vRetono1.equals("\"iniciar\"")){
+				JsonObject vRespuestaIniciar = vFachada.IniciarPartidaReanudada();
+				synchronized(conexiones){
+				for(Session client : conexiones){
+			            client.getBasicRemote().sendText(vRespuestaIniciar.toString());
+			      }
+				}
+			}
+		break;
+		
+		
 		case "\"disparoBase\"":
 				vRespuesta=vFachada.DisparaBase(jelement.getAsJsonObject().get("IdBase").getAsInt(), jelement.getAsJsonObject().get("sector").toString());
 				synchronized(conexiones){
@@ -114,9 +141,7 @@ public class WebSocket {
 					
 				synchronized(conexiones){
 					for(Session client : conexiones){
-						if (!client.equals(sesion)){
 				            client.getBasicRemote().sendText(vRespuesta.toString());
-				        }
 					}    
 				   }
 			break;
@@ -125,9 +150,7 @@ public class WebSocket {
 				vRespuesta=vFachada.GolpeDronAereo(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 				synchronized(conexiones){
 					for(Session client : conexiones){
-						if (!client.equals(sesion)){
 				            client.getBasicRemote().sendText(vRespuesta.toString());
-				        }
 					}    
 				   }
 			break;

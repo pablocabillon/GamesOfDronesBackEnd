@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+
+
 import Logica.Equipos;
 import Logica.Escenario;
 import Logica.Jugadores;
@@ -49,9 +51,9 @@ public void InsertarPartida(int vIdPartida,Date vFecha,int vCantJugadores,int vE
 		con.close();
 		
 	} catch (ClassNotFoundException e) {
-		e.getMessage();
+		e.printStackTrace();
 	} catch (SQLException e) {
-		System.out.println("Error de SQL");
+		e.printStackTrace();
 	}
 }
 

@@ -29,7 +29,7 @@ public class Consultas {
 				+"AND JU.IdPartida=DR.IdPartida INNER JOIN OBJETO AS OB ON OB.IdObjeto=DR.IdObjeto " 
 				+"AND OB.IdObjeto=DR.IdObjeto LEFT OUTER JOIN TERRESTRE AS TE ON TE.IdObjeto=DR.IdObjeto " 
 				+"AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador "
-				+"WHERE JU.idJugador=? AND JU.idEquipo=? AND JU.idPartida=?";
+				+"WHERE JU.idJugador=? AND JU.idEquipo=? AND JU.idPartida=? AND DR.idObjeto IN (?,?)";
 	}
 
 	public String InsertarPartida(){
@@ -94,7 +94,7 @@ public class Consultas {
 	}
 	
 	public String EliminarDron(){
-		return "DELETE FROM DRONES WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
+		return "DELETE FROM DRON WHERE IdObjeto= ? AND IdPartida=?";
 	}
 	
 	public String InsertarBase(){
@@ -118,11 +118,11 @@ public class Consultas {
 	}
 	
 	public String EliminarTerrestre(){
-		return "DELETE FROM TERRESTRE WHERE WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
+		return "DELETE FROM TERRESTRE WHERE IdObjeto= ? AND IdPartida=?";
 	}
 	
 	public String InsertarAereos(){
-		return "INSERT INTO AEREO (idObjeto,idPartida,idJugador,tieneBomba,motoresActivos) VALUES(?,?,?,?,?)";
+		return "INSERT INTO AEREO (idObjeto,idPartida,idJugador,tieneBomba,motoresActivos,bombaRota) VALUES(?,?,?,?,?,?)";
 	}
 	
 	public String ExisteAereo(){
@@ -130,7 +130,7 @@ public class Consultas {
 	}
 	
 	public String EliminarAereo(){
-		return "DELETE FROM AEREO WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
+		return "DELETE FROM AEREO WHERE IdObjeto= ? AND IdPartida=?";
 	}
 	
 	public String buscarObjeto(){

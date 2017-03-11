@@ -102,6 +102,13 @@ public class DAOJugador {
 			pstmt.setInt(1, IdJugador);
 			pstmt.setInt(2, IdEquipo);
 			pstmt.setInt(3, IdPartida);
+			if(IdEquipo==1){
+				pstmt.setInt(4, 2);
+				pstmt.setInt(5, 3);
+			}else{
+				pstmt.setInt(4, 4);
+				pstmt.setInt(5, 5);
+			}
 			ResultSet rs = pstmt.executeQuery();
 			String nombre=null;
 			

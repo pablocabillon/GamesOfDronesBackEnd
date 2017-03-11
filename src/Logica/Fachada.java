@@ -24,6 +24,7 @@ import Persistencia.DAOBase;
 import Persistencia.DAODron;
 import Persistencia.DAOEquipo;
 import Persistencia.DAOJugador;
+import Persistencia.DAOObjeto;
 import Persistencia.DAOPartida;
 import server.Conversor;
 
@@ -60,23 +61,28 @@ public class Fachada {
 	
 	private static ArrayList<Jugador> vListaJugadores=new ArrayList<>();
 	
-	
+	private static ArrayList<String> vListaJugadoresConectados=null;
 	
 	public Fachada () {
 
-		/*try{
+		
+	}
+	
+	public void AccesoDatos(){
+		
+		try{
 			Properties propiedades = new Properties();
-			propiedades.load(new FileInputStream("../applications/DronWebSocket/server.properties"));
-			AccesoBAse.SetearDriver(propiedades.getProperty("driver"));
+			String nomArch ="C:\\config.properties";
+			propiedades.load(new FileInputStream(nomArch));
 			AccesoBAse.SetearUrl(propiedades.getProperty("url"));
-			AccesoBAse.SetearUrl(propiedades.getProperty("user"));
+			AccesoBAse.SetearUsuario(propiedades.getProperty("user"));
 			AccesoBAse.SetearPassword(propiedades.getProperty("password"));
 		}catch (FileNotFoundException e){ 	
 		   System.out.println("Error, el archivo de configuración no existe!");
 		}
 		 catch (IOException e){ 
 		   System.out.println("Error, no se puede leer el archivo de configuración!");
-		 }*/
+		 }
 	}
 	
 	public JsonObject CrearPartida(int vCantidadJugadores) throws IOException{
@@ -90,7 +96,7 @@ public class Fachada {
 		{
 			Equipos vEquipos=new Equipos();
 			Equipo vEquipo1=new Equipo(1, "EquipoAereo", new Jugadores());
-			Equipo vEquipo2=new Equipo(1, "EquipoTerrestre", new Jugadores());
+			Equipo vEquipo2=new Equipo(2, "EquipoTerrestre", new Jugadores());
 			vEquipos.insert(1, vEquipo1);
 			vEquipos.insert(2, vEquipo2);
 			Objetos vObjetos=new Objetos();
@@ -144,17 +150,16 @@ public class Fachada {
 		}
 	   else if(vCantJugadoresPartidaActual==4){
 				vIdJugadorAereo=vIdJugadorAereo+1;
-				vIdObjeto=vIdObjeto+1;
 				if(vIdObjetoAereo==1){
 					vIdObjetoAereo=vIdObjetoAereo+1;
 					vDron=(Dron) new Objeto().GenerarObjeto(2, "Aereo");
-					vDrones.insert(vIdObjeto, vDron);
+					vDrones.insert(2, vDron);
 					vPartida.getObjetos().insert(2, vDron);
 				}
 				else
 				{
 					vDron=(Dron) new Objeto().GenerarObjeto(3, "Aereo");
-					vDrones.insert(vIdObjeto, vDron);
+					vDrones.insert(3, vDron);
 					vPartida.getObjetos().insert(3, vDron);
 				}
 				
@@ -166,13 +171,11 @@ public class Fachada {
 		   }else{
 			   
 				vIdJugadorAereo=vIdJugadorAereo+1;
-				vIdObjeto=vIdObjeto+1;
 				vDron=(Dron) new Objeto().GenerarObjeto(2, "Aereo");
-				vDrones.insert(vIdObjeto, vDron);
+				vDrones.insert(2, vDron);
 				vPartida.getObjetos().insert(2, vDron);
-				vIdObjeto=vIdObjeto+1;
 				Dron vDron1=(Dron) new Objeto().GenerarObjeto(3, "Aereo");
-				vDrones.insert(vIdObjeto, vDron1);
+				vDrones.insert(3, vDron1);
 				vPartida.getObjetos().insert(3, vDron1);
 				vCantJugadoresAereo=0;
 				Jugador vJugador=new Jugador(vIdJugadorAereo, vNombreJugador, vDrones);
@@ -219,17 +222,16 @@ public class Fachada {
 		}
 	   else if(vCantJugadoresPartidaActual==4){
 		    vIdJugadorTerrestre=vIdJugadorTerrestre+1;
-			vIdObjeto=vIdObjeto+1;
 			if(vIdObjetoTerrestre==1){
 				vIdObjetoTerrestre=vIdObjetoTerrestre+1;
 				vDron=(Dron) new Objeto().GenerarObjeto(4, "Terrestre");
-				vDrones.insert(vIdObjeto, vDron);
+				vDrones.insert(4, vDron);
 				vPartida.getObjetos().insert(4, vDron);
 			}
 			else
 			{
 				vDron=(Dron) new Objeto().GenerarObjeto(5, "Terrestre");
-				vDrones.insert(vIdObjeto, vDron);
+				vDrones.insert(5, vDron);
 				vPartida.getObjetos().insert(5, vDron);
 			}
 			vCantJugadoresTerrestre--;
@@ -239,13 +241,11 @@ public class Fachada {
 	   }else{
 		    
 		    vIdJugadorTerrestre=vIdJugadorTerrestre+1;
-			vIdObjeto=vIdObjeto+1;
 			vDron=(Dron) new Objeto().GenerarObjeto(4, "Terrestre");
-			vDrones.insert(vIdObjeto, vDron);
+			vDrones.insert(4, vDron);
 			vPartida.getObjetos().insert(4, vDron);
-			vIdObjeto=vIdObjeto+1;
 			Dron vDron1=(Dron) new Objeto().GenerarObjeto(5, "Terrestre");
-			vDrones.insert(vIdObjeto, vDron1);
+			vDrones.insert(5, vDron1);
 			vPartida.getObjetos().insert(5, vDron1);
 			vCantJugadoresTerrestre=0;
 			Jugador vJugador=new Jugador(vIdJugadorTerrestre, vNombreJugador, vDrones);
@@ -270,7 +270,6 @@ public class Fachada {
 		
 		return vRespuesta;
 	}
-	
 	
 	public JsonObject IniciarPartida(){
 		JsonObject vRespuesta = new JsonObject();
@@ -335,76 +334,150 @@ public class Fachada {
 			}
 			
 		}
-
-
+		vRespuesta.addProperty("CantidadJugadores",vCantJugadoresPartidaActual);
+		
 		return vRespuesta;
 		
 	}
 
-	public void GuardarPartida() throws IOException,SQLException 
+	public JsonObject GuardarPartida(JsonElement vDatos) 
 	{
-		long time = System.currentTimeMillis();
-		java.sql.Date fecha_guardar = new java.sql.Date(time);
-		new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarPartida(vIdPArtidaActual, fecha_guardar, vCantJugadores, vPartida.getEscenario());
-		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerNombre());
-		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerNombre());
-		
-		int vCantJugadoresEquipo1=vPartida.getEquipos().Find(1).ObtenerJugadores().CantJugadores();
-		int vCantJugadoresEquipo2=vPartida.getEquipos().Find(2).ObtenerJugadores().CantJugadores();
-			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre());
-			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre());
+		JsonObject vRespuesta = new JsonObject();
+		try{
 			
-		if(vCantJugadoresEquipo1==2)
-			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(2).ObtenerNombre());
+			vRespuesta.addProperty("tipo", "guardarPartida");
+			AccesoDatos();
+			Partida vPartidaAux = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(1);
+			if(vPartidaAux!=null)
+				BorrarDatos(vPartidaAux);
+			long time = System.currentTimeMillis();
+			java.sql.Date fecha_guardar = new java.sql.Date(time);
+			new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarPartida(vIdPArtidaActual, fecha_guardar, vCantJugadoresPartidaActual, vPartida.getEscenario());
+			new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerNombre());
+			new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarEquipo(vPartida.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerNombre());
 			
-		if(vCantJugadoresEquipo2==1)
-			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(2).ObtenerNombre());
+			int vCantJugadoresEquipo1=vPartida.getEquipos().Find(1).ObtenerJugadores().CantJugadores();
+			int vCantJugadoresEquipo2=vPartida.getEquipos().Find(2).ObtenerJugadores().CantJugadores();
+				new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerNombre());
+				new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(1,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerNombre());
+				
+			if(vCantJugadoresEquipo1==2)
+				new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,1, vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre());
+				
+			if(vCantJugadoresEquipo2==2)
+				new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarJugador(2,2, vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre());
+			
+			GuardarDrones(vCantJugadoresEquipo1,vCantJugadoresEquipo2,vDatos);
+			
+			InsertarBase();
+			
+			vRespuesta.addProperty("retorno", "ok");
+		}
 		
-		GuardarDrones(vCantJugadoresEquipo1,vCantJugadoresEquipo2);
+		catch (Exception e){ 
+				vRespuesta.addProperty("retorno", e.getMessage());
+			 }
 		
-		InsertarBase();
-		
-		ResetearDatos();
-		
+		return vRespuesta;
+
 	}
 	
-	public void GuardarDrones(int vCantJugadoresEquipo1,int vCantJugadoresEquipo2){
-		
-		
-		for (int i=1;i<=vCantJugadoresEquipo1;i++){
+	public void BorrarDatos(Partida vPArtidaAux){
+		new DAOBase(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarBase(0, vIdPArtidaActual);
+		new DAOBase(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarBase(1, vIdPArtidaActual);
+		new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(0, vIdPArtidaActual);
+		new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(1, vIdPArtidaActual);
+		new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronAereo(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2), vIdPArtidaActual);
+		new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronTerrestre(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4), vIdPArtidaActual);
+		new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2), vIdPArtidaActual);
+		new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4), vIdPArtidaActual);
+		new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(2, vIdPArtidaActual);
+		new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(4, vIdPArtidaActual);
+		if(vPArtidaAux.getCantJugadores()==4){
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronAereo(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronTerrestre(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5), vIdPArtidaActual);
+			new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(3, vIdPArtidaActual);
+			new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(5, vIdPArtidaActual);
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarJugador(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerIdJugador(), vPArtidaAux.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual);
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarJugador(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerIdJugador(), vPArtidaAux.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual);
+		}else{
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronAereo(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDronTerrestre(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3), vIdPArtidaActual);
+			new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarDron(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5), vIdPArtidaActual);
+			new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(3, vIdPArtidaActual);
+			new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarObjeto(5, vIdPArtidaActual);
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarJugador(vPArtidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerIdJugador(), vPArtidaAux.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual);
+			new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarJugador(vPArtidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerIdJugador(), vPArtidaAux.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual);
 			
-			int vCantidadDronesJugador=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().cantElementos();
-			
-			for(int j=1;j<=vCantidadDronesJugador;j++){
-				
-				int vIdObjeto=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j).ObtenerIdObjeto();
-				int vIdJugador=vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerIdJugador();
-				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j),vIdPArtidaActual, vIdJugador);
-				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j),vIdPArtidaActual, vIdJugador);
-			}
 		}
 		
-		for (int i=1;i<=vCantJugadoresEquipo2;i++){
-			
-			int vCantidadDronesJugador=vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().cantElementos();
-			
-			for(int j=1;j<=vCantidadDronesJugador;j++){
-				
-				int vIdObjeto=vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j).ObtenerIdObjeto();
-				int vIdJugador=vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerIdJugador();
-
-				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdPArtidaActual, vIdJugador);
-				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(i).ObtenerColeccionDrones().find(j), vIdPArtidaActual, vIdJugador);
-
-
+		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarEquipo(vPartida.getEquipos().Find(1).ObtenerIdEquipo(), vIdPArtidaActual);
+		new DAOEquipo(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarEquipo(vPartida.getEquipos().Find(2).ObtenerIdEquipo(), vIdPArtidaActual);
+		new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).EliminarPartida(vIdPArtidaActual);
+	}
+	
+	public void GuardarDrones(int vCantJugadoresEquipo1,int vCantJugadoresEquipo2,JsonElement vDatos){
+	
+			if(vDatos.getAsJsonObject().get("aereo1X").toString()!=null){
+				vPartida.getObjetos().Find(2).SetearCoordenadaX(vDatos.getAsJsonObject().get("aereo1X").getAsInt());
+				vPartida.getObjetos().Find(2).SetearCoordenadaY(vDatos.getAsJsonObject().get("aereo1Y").getAsInt());
+				new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarObjeto(vPartida.getObjetos().Find(2), vIdPArtidaActual);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerIdJugador());
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(2),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerIdJugador());
 			}
-		}
+			if(vDatos.getAsJsonObject().get("terrestre1X").toString()!=null){
+				vPartida.getObjetos().Find(4).SetearCoordenadaX(vDatos.getAsJsonObject().get("terrestre1X").getAsInt());
+				vPartida.getObjetos().Find(4).SetearCoordenadaY(vDatos.getAsJsonObject().get("terrestre1Y").getAsInt());
+				new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarObjeto(vPartida.getObjetos().Find(4), vIdPArtidaActual);
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerIdJugador());
+				new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(4), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerIdJugador());
+				
+			}
+			if(vDatos.getAsJsonObject().get("aereo2X").toString()!=null){
+				vPartida.getObjetos().Find(3).SetearCoordenadaX(vDatos.getAsJsonObject().get("aereo2X").getAsInt());
+				vPartida.getObjetos().Find(3).SetearCoordenadaY(vDatos.getAsJsonObject().get("aereo2Y").getAsInt());
+				new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarObjeto(vPartida.getObjetos().Find(3), vIdPArtidaActual);
+				if(vCantJugadoresEquipo1==1){
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerIdJugador());
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(3),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerIdJugador());
+				}else{
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerIdJugador());
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronAereo((DronAereo)vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(3),vIdPArtidaActual, vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerIdJugador());
+				}
+			}
+
+			if(vDatos.getAsJsonObject().get("terrestre2X").toString()!=null){
+				vPartida.getObjetos().Find(5).SetearCoordenadaX(vDatos.getAsJsonObject().get("terrestre2X").getAsInt());
+				vPartida.getObjetos().Find(5).SetearCoordenadaY(vDatos.getAsJsonObject().get("terrestre2Y").getAsInt());
+				new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarObjeto(vPartida.getObjetos().Find(5), vIdPArtidaActual);
+				if(vCantJugadoresEquipo2==1){
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerIdJugador());
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(5), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerIdJugador());
+				}else{
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDron(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerIdJugador());
+					new DAODron(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarDronTerrestre((DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(5), vIdPArtidaActual, vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerIdJugador());
+				}
+				
+			}
 		
 	}
 
 	public void ResetearDatos(){
 		
+		Partida  vPartida;
+		
 		vIdPArtidaActual=0;
+		
+		vCantJugadores=0;
+		
+		vCantJugadoresPartidaActual=0;
+		
+		vCantJugadoresAereo=0;
+		
+		vCantJugadoresTerrestre=0;
 		
 		vIdJugadorAereo=0;
 		
@@ -416,7 +489,14 @@ public class Fachada {
 		
 		vIdObjetoTerrestre=1;
 		
-		ArrayList<Jugador> vListaJugadores=new ArrayList<>();
+		vIdEscenarioPArtidaActual=0;
+		
+		vListaJugadores=new ArrayList<>();
+		
+		vListaJugadoresConectados=null;
+		
+		vPartida=null;
+		
 	}
 	
 	public void InsertarBase(){
@@ -431,27 +511,149 @@ public class Fachada {
 	String vTipo;
 	int vVidaZonaPolvorin;
 	int vVidaZonaDespegue;
-	
-	vIdObjeto=vPartida.getObjetos().Find(1).ObtenerIdObjeto();
-	vCoordenadaX=vPartida.getObjetos().Find(1).ObtenerCoordenadaX();
-	vCoordenadaY=vPartida.getObjetos().Find(1).ObtenerCoordenadaY();
-	vAltura=vPartida.getObjetos().Find(1).ObtenerAltura();
-	vRotacion=vPartida.getObjetos().Find(1).ObtenerRotacion();
-	vAngulo=vPartida.getObjetos().Find(1).ObtenerAngulo();
-	vTipo=vPartida.getObjetos().Find(1).ObtenerTipo();
-	vAncho=vPartida.getObjetos().Find(1).ObtenerAncho();
-	Base vBase=(Base) vPartida.getObjetos().Find(1);
-	vVidaZonaPolvorin=vBase.ObtenerVidaZonaPolvorin();
-	vVidaZonaDespegue=vBase.ObtenerVidaZonaDespegue();
-	Base vBaseInsert=new Base(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVidaZonaPolvorin, vVidaZonaDespegue);
-	new DAOBase(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarBase(vBaseInsert,vIdPArtidaActual);
+	for(int i=0;i<2;i++){
+		
+		vIdObjeto=vPartida.getObjetos().Find(i).ObtenerIdObjeto();
+		vCoordenadaX=vPartida.getObjetos().Find(i).ObtenerCoordenadaX();
+		vCoordenadaY=vPartida.getObjetos().Find(i).ObtenerCoordenadaY();
+		vAltura=vPartida.getObjetos().Find(i).ObtenerAltura();
+		vRotacion=vPartida.getObjetos().Find(i).ObtenerRotacion();
+		vAngulo=vPartida.getObjetos().Find(i).ObtenerAngulo();
+		vTipo=vPartida.getObjetos().Find(i).ObtenerTipo();
+		vAncho=vPartida.getObjetos().Find(i).ObtenerAncho();
+		Base vBase=(Base) vPartida.getObjetos().Find(i);
+		vVidaZonaPolvorin=vBase.ObtenerVidaZonaPolvorin();
+		vVidaZonaDespegue=vBase.ObtenerVidaZonaDespegue();
+		Base vBaseInsert=new Base(vIdObjeto, vCoordenadaX, vCoordenadaY, vAltura, vAncho, vRotacion, vAngulo, vTipo, vVidaZonaPolvorin, vVidaZonaDespegue);
+		new DAOObjeto(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarObjeto(vBase, vIdPArtidaActual);
+		new DAOBase(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).InsertarBase(vBaseInsert,vIdPArtidaActual);
+	}
+
+
 		
 	}
 	
-	public Partida ReanudarPartida(int vIdPartida){
+	public JsonObject ReanudarPartida(String vNombre){
 		
-		return vPartida = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(vIdPartida);
-		 
+		JsonObject vRespuesta = new JsonObject();
+		vRespuesta.addProperty("tipo", "reanudarPartida");
+		boolean existe=false;
+		AccesoDatos();
+		Partida vPartidaAux = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(1);
+		vCantJugadoresPartidaActual=vPartidaAux.getCantJugadores();
+		if(vListaJugadoresConectados==null){
+			vListaJugadoresConectados=new ArrayList<>();
+			vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerNombre());
+			vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerNombre());
+			if(vCantJugadoresPartidaActual==4){
+				vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre());
+				vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre());
+			}
+		}
+			if(vListaJugadoresConectados.contains(vNombre)){
+				existe=true;
+				vListaJugadoresConectados.remove(vNombre);
+			}
+			
+			if(!existe)
+				vRespuesta.addProperty("retorno", "No existe Jugador.");
+			else if(vListaJugadoresConectados.size()==0)
+					vRespuesta.addProperty("retorno", "iniciar");
+			else
+				vRespuesta.addProperty("retorno", "esperar");
+			
+		return vRespuesta;
+	}
+	
+	public JsonObject IniciarPartidaReanudada(){
+		
+		ResetearDatos();
+		JsonObject vRespuesta = new JsonObject();
+		vRespuesta.addProperty("tipo", "iniciarPartidaReanudar");
+		AccesoDatos();
+		vPartida = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(1);
+		vRespuesta.addProperty("XBase1",vPartida.getObjetos().Find(0).ObtenerCoordenadaX());
+		vRespuesta.addProperty("YBase1", vPartida.getObjetos().Find(0).ObtenerCoordenadaY());
+		vRespuesta.addProperty("XBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaX());
+		vRespuesta.addProperty("YBase2", vPartida.getObjetos().Find(1).ObtenerCoordenadaY());
+		vRespuesta.addProperty("CantidadJugadores", vPartida.getCantJugadores());
+		vRespuesta.addProperty("escenario", vPartida.getEscenario());
+		int vIndice=0;
+		for(int i=0;i<6;i++)
+		{
+			
+			if(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i)!=null){
+				if(vIndice==0){
+				vRespuesta.addProperty("IdAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+				vRespuesta.addProperty("camaraAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCamara());
+				vRespuesta.addProperty("canonAereo1", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCanon());
+				vIndice++;
+				}else{
+				vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+				vRespuesta.addProperty("camaraAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCamara());
+				vRespuesta.addProperty("canonAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCanon());
+				}
+			}
+		}
+		vIndice=0;
+		for(int i=0;i<6;i++)
+		{
+			if(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i)!=null){
+				if(vIndice==0){
+				vRespuesta.addProperty("IdTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+				vRespuesta.addProperty("camaraTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCamara());
+				vRespuesta.addProperty("canonTerrestre1", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCanon());
+				DronTerrestre vDronAux=(DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i);
+				vRespuesta.addProperty("blindajeTerrestre1",vDronAux.ObtenerBlindaje());
+				vIndice++;
+				}else{
+				vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+				vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+				vRespuesta.addProperty("YTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+				vRespuesta.addProperty("camaraTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCamara());	
+				vRespuesta.addProperty("canonTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i).ObtenerCanon());
+				DronTerrestre vDronAux=(DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerColeccionDrones().find(i);
+				vRespuesta.addProperty("blindajeTerrestre2",vDronAux.ObtenerBlindaje());
+				}
+			}
+	
+		}
+		if(vPartida.getEquipos().Find(1).ObtenerJugadores().CantJugadores()==2){
+			for(int i=0;i<6;i++)
+			{
+				if(vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i)!=null){
+					vRespuesta.addProperty("IdAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+					vRespuesta.addProperty("XAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+					vRespuesta.addProperty("YAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());
+					vRespuesta.addProperty("camaraAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCamara());
+					vRespuesta.addProperty("canonAereo2", vPartida.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCanon());
+				}
+		
+			}
+		}
+		if(vPartida.getEquipos().Find(2).ObtenerJugadores().CantJugadores()==2){
+			for(int i=0;i<6;i++)
+			{
+				if(vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i)!=null){
+					vRespuesta.addProperty("IdTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerIdObjeto());
+					vRespuesta.addProperty("XTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaX());
+					vRespuesta.addProperty("YTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCoordenadaY());	
+					vRespuesta.addProperty("camaraTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCamara());	
+					vRespuesta.addProperty("canonTerrestre2", vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i).ObtenerCanon());
+					DronTerrestre vDronAux=(DronTerrestre)vPartida.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerColeccionDrones().find(i);
+					vRespuesta.addProperty("blindajeTerrestre2",vDronAux.ObtenerBlindaje());
+				}
+		
+			}
+			
+		}
+		return vRespuesta;
 	}
 	
 	public JsonObject DisparaBase(int  vIdObjeto,String Sector){
