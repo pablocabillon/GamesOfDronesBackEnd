@@ -70,11 +70,11 @@ public class WebSocket {
 		case "\"UnirPartida\"":
 			String vEquipo=jelement.getAsJsonObject().get("equipo").toString();
 				if(vEquipo.equals("\"aereo\"")){
-							String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+							String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString().replace("\"", " ").replace("\"", " ");
 							vRespuesta=vFachada.UnirsePartidaAereo(vNombre);
 				}
 				else{
-						String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString();
+						String vNombre=jelement.getAsJsonObject().get("nombreJugador").toString().replace("\"", " ").replace("\"", " ");
 						vRespuesta=vFachada.UnirsePartidaTerrestre(vNombre);
 
 				}
@@ -106,7 +106,7 @@ public class WebSocket {
 				   }
 			break;
 		case "\"reanudarPartida\"":
-			vRespuesta=vFachada.ReanudarPartida(jelement.getAsJsonObject().get("nombreJugador").toString());
+			vRespuesta=vFachada.ReanudarPartida(jelement.getAsJsonObject().get("nombreJugador").toString().replace("\"", " ").replace("\"", " "));
 			synchronized(conexiones){
 				for(Session client : conexiones){
 					 if (client.equals(sesion)){

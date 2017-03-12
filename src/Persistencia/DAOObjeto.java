@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Logica.Base;
+import Logica.Dron;
+import Logica.DronAereo;
+import Logica.DronTerrestre;
 import Logica.Objeto;
 import Logica.Objetos;
 
@@ -118,7 +121,7 @@ public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(Url, User, Password);
 		Consultas consultas = new Consultas();
-		
+		String vTipo=null;
 		String DevolverObjeto = consultas.buscarObjeto();
 		PreparedStatement pstmt = con.prepareStatement(DevolverObjeto);	
 		pstmt.setInt(1, vIdObjeto);
@@ -127,12 +130,42 @@ public Objeto DevolverObjeto(int vIdObjeto,int vIdPartida){
 		
 		
 		if(rs.next())
-		{
-			vObjeto=new Objeto(vIdObjeto, rs.getInt("coordX"),rs.getInt("coordY"), rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"));
-			
-		}	
+			vTipo=rs.getString("tipo");
+		
 		rs.close();
 		pstmt.close();
+		
+		if(vTipo.equals("Aereo")){
+			DevolverObjeto = consultas.DevolverDronAereo();
+			pstmt = con.prepareStatement(DevolverObjeto);
+			pstmt.setInt(1, vIdObjeto);
+			ResultSet pr = pstmt.executeQuery();
+			if(pr.next())
+				vObjeto=new DronAereo(pr.getInt("idObjeto"),pr.getInt("coordX"),pr.getInt("coordY"),pr.getInt("altura"),pr.getInt("ancho"),pr.getInt("rotacion"),pr.getInt("angulo"),pr.getString("tipo"),pr.getInt("velocidad"),pr.getBoolean("camara"),pr.getBoolean("canion"),pr.getInt("vision"),pr.getInt("motoresActivos"),pr.getBoolean("tieneBomba"),pr.getBoolean("bombaRota"));
+			pr.close();
+			pstmt.close();
+		}
+		else if(vTipo.equals("Terrestre")){
+			DevolverObjeto = consultas.DevolverDronTerrestre();
+			pstmt = con.prepareStatement(DevolverObjeto);
+			pstmt.setInt(1, vIdObjeto);
+			ResultSet pr = pstmt.executeQuery();
+			if(pr.next())
+				vObjeto=new DronTerrestre(pr.getInt("IdObjeto"),pr.getInt("coordX"),pr.getInt("coordY"),pr.getInt("altura"),pr.getInt("ancho"),pr.getInt("rotacion"),pr.getInt("angulo"),pr.getString("tipo"),pr.getInt("velocidad"), pr.getBoolean("camara"),pr.getBoolean("canion"),pr.getInt("vision"), pr.getInt("blindajeActivo"));
+			pr.close();
+			pstmt.close();
+		}
+		else{
+			DevolverObjeto = consultas.DevolverBase();
+			pstmt = con.prepareStatement(DevolverObjeto);
+			pstmt.setInt(1, vIdObjeto);
+			ResultSet pr = pstmt.executeQuery();
+			if(pr.next())
+				vObjeto=new Base(pr.getInt("IdObjeto"),pr.getInt("coordX"),pr.getInt("coordY"),pr.getInt("altura"),pr.getInt("ancho"),pr.getInt("rotacion"),pr.getInt("angulo"),pr.getString("tipo"),pr.getInt("vidaPolvorin"),pr.getInt("vidaZonaDespegue"));
+			pr.close();
+			pstmt.close();
+		}
+
 		con.close();
 		
 		

@@ -33,5 +33,10 @@ public class Objetos {
 		return Objetos.get(vClave);
 	}
 	
+	public Objeto Remove (Integer vClave)
+	{
+		return Objetos.remove(vClave);
+	}
+	
 	
 }

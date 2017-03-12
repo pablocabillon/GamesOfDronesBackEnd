@@ -13,6 +13,7 @@ import Logica.DronTerrestre;
 import Logica.Drones;
 import Logica.Jugador;
 import Logica.Jugadores;
+import Logica.Objeto;
 import Persistencia.Consultas;
 
 
@@ -115,11 +116,10 @@ public class DAOJugador {
 
 				while(rs.next())
 				{
-					if(rs.getString("tipo")=="Aereo")
-						vDron=new DronAereo(rs.getInt("idObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),
-								rs.getString("tipo"),rs.getInt("velocidad"),rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"),rs.getInt("motoresActivos"),rs.getBoolean("tieneBomba"),rs.getBoolean("bombaRota"));
+					if(rs.getString("tipo").equals("Aereo"))
+						vDron=(Dron)new DronAereo(rs.getInt("idObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"),rs.getInt("velocidad"),rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"),rs.getInt("motoresActivos"),rs.getBoolean("tieneBomba"),rs.getBoolean("bombaRota"));
 					else
-						vDron=new DronTerrestre(rs.getInt("IdObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"),rs.getInt("velocidad"), rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"), rs.getInt("blindajeActivo"));
+						vDron=(Dron)new DronTerrestre(rs.getInt("IdObjeto"),rs.getInt("coordX"),rs.getInt("coordY"),rs.getInt("altura"),rs.getInt("ancho"),rs.getInt("rotacion"),rs.getInt("angulo"),rs.getString("tipo"),rs.getInt("velocidad"), rs.getBoolean("camara"),rs.getBoolean("canion"),rs.getInt("vision"), rs.getInt("blindajeActivo"));
 					
 					 vDrones.insert(rs.getInt("idObjeto"),vDron);
 					 nombre = rs.getString("nombre");
@@ -178,6 +178,7 @@ public class DAOJugador {
 
 		return vListaJugadores;
 	}
+	
 	public void EliminarJugador(int vIdJugador,int vIdEquipo,int vIdPartida){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -202,5 +203,50 @@ public class DAOJugador {
 		
 	}
 	
-	
+	public int DevolverIdDron(String vNombreJugador){
+		
+		int vIdDron=0;
+		int vIdJugador=0;
+		int vIdEquipo=0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(Url, User, Password);
+			Consultas consultas = new Consultas();
+			String DevolverIdDronJugador= consultas.NombreJugador();
+			PreparedStatement pstmt = con.prepareStatement(DevolverIdDronJugador);
+		    	
+			pstmt.setString(1, vNombreJugador);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			if(rs.next()){
+				vIdJugador=rs.getInt("IdJugador");
+				vIdEquipo=rs.getInt("IdEquipo");
+			}
+			pstmt.close();
+			DevolverIdDronJugador= consultas.IdDronJugador();
+			pstmt = con.prepareStatement(DevolverIdDronJugador);
+			pstmt.setInt(1, vIdJugador);
+			if(vIdEquipo==1){
+				pstmt.setInt(2,2);
+				pstmt.setInt(3, 3);
+			}else{
+				pstmt.setInt(2,4);
+				pstmt.setInt(3, 5);
+				
+			}
+			rs = pstmt.executeQuery();
+
+			if(rs.next())
+				vIdDron=rs.getInt("IdObjeto");
+			
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.getMessage();
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+		}
+		
+		return vIdDron;
+	}
 }

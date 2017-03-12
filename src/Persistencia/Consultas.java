@@ -31,7 +31,17 @@ public class Consultas {
 				+"AND TE.IdJugador=DR.IdJugador LEFT OUTER JOIN AEREO AS AE ON AE.IdObjeto=DR.IdObjeto AND AE.IdJugador=DR.IdJugador "
 				+"WHERE JU.idJugador=? AND JU.idEquipo=? AND JU.idPartida=? AND DR.idObjeto IN (?,?)";
 	}
-
+	
+	public String NombreJugador(){
+		
+		return "SELECT  * FROM JUGADOR WHERE rtrim(ltrim(nombre))=rtrim(ltrim(?))" ;
+	}
+	
+	public String IdDronJugador(){
+		
+		return "SELECT MIN(idObjeto) AS IdObjeto FROM DRON WHERE idJugador=? AND idObjeto IN(?,?)" ;
+	}
+	
 	public String InsertarPartida(){
 		
 		return "INSERT INTO PARTIDA (idPartida,fechaHora,CantJugadores,idEscenario) VALUES(?,?,?,?)";
@@ -129,6 +139,22 @@ public class Consultas {
 		return "SELECT * FROM AEREO WHERE IdObjeto= ? AND IdPartida=? AND IdJugador=?";
 	}
 	
+	public String DevolverDronAereo(){
+		return "SELECT OB.idObjeto,OB.coordX,OB.coordY,OB.altura,OB.ancho,OB.rotacion,OB.angulo,OB.TIPO,DR.velocidad,DR.camara,DR.canion,DR.vision,AE.motoresActivos,"
+				+ "AE.tieneBomba,AE.bombaRota FROM OBJETO AS OB INNER JOIN AEREO AS AE ON AE.idObjeto=OB.idObjeto INNER JOIN DRON AS DR ON DR.idObjeto=OB.idObjeto "
+				+ " WHERE OB.IdObjeto=?";
+	}
+	
+	public String DevolverDronTerrestre(){
+		return "SELECT OB.idObjeto,OB.coordX,OB.coordY,OB.altura,OB.ancho,OB.rotacion,OB.angulo,OB.TIPO,DR.velocidad,DR.camara,DR.canion,DR.vision,TR.blindajeActivo"
+				+ " FROM OBJETO AS OB INNER JOIN TERRESTRE AS TR ON TR.idObjeto=OB.idObjeto INNER JOIN DRON AS DR ON DR.idObjeto=OB.idObjeto "
+				+ " WHERE OB.IdObjeto=?";
+	}
+	
+	public String DevolverBase(){
+		return "SELECT OB.idObjeto,OB.coordX,OB.coordY,OB.altura,OB.ancho,OB.rotacion,OB.angulo,OB.TIPO,BA.vidaPolvorin,BA.vidaZonaDespegue "
+				+ " FROM OBJETO AS OB INNER JOIN BASE AS BA ON BA.idObjeto=OB.idObjeto  WHERE OB.IdObjeto=?";
+	}
 	public String EliminarAereo(){
 		return "DELETE FROM AEREO WHERE IdObjeto= ? AND IdPartida=?";
 	}
