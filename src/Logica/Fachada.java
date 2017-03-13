@@ -65,6 +65,8 @@ public class Fachada {
 	
 	private static ArrayList<String> vListaJugadoresIngresados=null;
 	
+	private static int vCantidadJugadoresAbandono=0; 
+	
 	public Fachada () {
 
 		
@@ -482,7 +484,6 @@ public class Fachada {
 		}
 }
 
-	
 	public void ResetearDatos(){
 				
 		vIdPArtidaActual=0;
@@ -515,8 +516,9 @@ public class Fachada {
 		
 		vPartida=null;
 		
+		vCantidadJugadoresAbandono=0; 
+		
 	}
-	
 	
 	public void InsertarBase(){
 	int vIdObjeto;
@@ -553,47 +555,46 @@ public class Fachada {
 	}
 }
 	
-	
 	public JsonObject ReanudarPartida(String vNombre){
 		JsonObject vRespuesta = new JsonObject();
 		
 		try{
-		vRespuesta.addProperty("tipo", "reanudarPartida");
-		boolean existe=false;
-		AccesoDatos();
-		Partida vPartidaAux = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(1);
-		DAOJugador vJugador=new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword());
-		if(vPartidaAux!=null){
-			if(vListaJugadoresConectados==null){
-				vListaJugadoresConectados=new ArrayList<>();
-				vListaJugadoresIngresados=new ArrayList<>();
-				vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerNombre().toUpperCase());
-				vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerNombre().toUpperCase());
-				if(vPartidaAux.getCantJugadores()==4){
-					vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre().toUpperCase());
-					vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre().toUpperCase());
+			vRespuesta.addProperty("tipo", "reanudarPartida");
+			boolean existe=false;
+			AccesoDatos();
+			Partida vPartidaAux = new DAOPartida(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword()).DevolverPartida(1);
+			DAOJugador vJugador=new DAOJugador(AccesoBAse.ObtenerUrl(),AccesoBAse.ObtenerUsuario(),AccesoBAse.ObtenerPassword());
+			if(vPartidaAux!=null){
+				if(vListaJugadoresConectados==null){
+					vListaJugadoresConectados=new ArrayList<>();
+					vListaJugadoresIngresados=new ArrayList<>();
+					vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(0).ObtenerNombre().toUpperCase());
+					vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(0).ObtenerNombre().toUpperCase());
+					if(vPartidaAux.getCantJugadores()==4){
+						vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(1).ObtenerJugadores().Find(1).ObtenerNombre().toUpperCase());
+						vListaJugadoresConectados.add(vPartidaAux.getEquipos().Find(2).ObtenerJugadores().Find(1).ObtenerNombre().toUpperCase());
+						}
 					}
-				}
-				if(vListaJugadoresConectados.contains(vNombre.toUpperCase())){
-					existe=true;
-					vRespuesta.addProperty("DronId", vJugador.DevolverIdDron(vNombre.toUpperCase()));
-					vListaJugadoresConectados.remove(vNombre.toUpperCase());
-					vListaJugadoresIngresados.add(vNombre.toUpperCase());
-				}		
-				if(!existe){
-					if(vListaJugadoresIngresados.contains(vNombre.toUpperCase()))
-						vRespuesta.addProperty("retorno", "EL jugador ya ingresó.");
+					if(vListaJugadoresConectados.contains(vNombre.toUpperCase())){
+						existe=true;
+						vRespuesta.addProperty("DronId", vJugador.DevolverIdDron(vNombre.toUpperCase()));
+						vListaJugadoresConectados.remove(vNombre.toUpperCase());
+						vListaJugadoresIngresados.add(vNombre.toUpperCase());
+					}		
+					if(!existe){
+						if(vListaJugadoresIngresados.contains(vNombre.toUpperCase()))
+							vRespuesta.addProperty("retorno", "EL jugador ya ingresó.");
+						else
+							vRespuesta.addProperty("retorno", "No existe jugador.");
+					}else if(vListaJugadoresConectados.size()==0)
+							vRespuesta.addProperty("retorno", "iniciar");
 					else
-						vRespuesta.addProperty("retorno", "No existe jugador.");
-				}else if(vListaJugadoresConectados.size()==0)
-						vRespuesta.addProperty("retorno", "iniciar");
-				else
 					vRespuesta.addProperty("retorno", "esperar");
 				
 				vRespuesta.addProperty("CantidadJugadores", vPartida.getCantJugadores());
-		}else{
-			vRespuesta.addProperty("retorno", "No hay partidas guardadas.");
-		}
+			}else{
+				vRespuesta.addProperty("retorno", "No hay partidas guardadas.");
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -684,11 +685,18 @@ public class Fachada {
 	return vRespuesta;
 }
 	
-	public JsonObject DisparaBase(int  vIdObjeto,String Sector){	
+	public JsonObject DisparaBase(int  vIdObjeto,String Sector,String vTipoDisparo,int vIdDronAereo){	
 	JsonObject vRespuesta = new JsonObject();
 	try{
 		vRespuesta.addProperty("tipo", "disparoBAse");
 		Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
+		if(vTipoDisparo.equals("\"bala\""))
+			vTipoDisparo="bala";
+		else{
+			vTipoDisparo="bomba";
+			Objeto vObjetoAereo=vPartida.getObjetos().Find(vIdDronAereo);
+			((DronAereo) vObjetoAereo).SetearTieneBomba(false);
+		}
 		switch (Sector) {
 		    	case "\"polvorin\"":
 		    		((Base) vObjeto).SetearVidaZonaPolvorin(((Base) vObjeto).ObtenerVidaZonaPolvorin()-1);
@@ -700,6 +708,8 @@ public class Fachada {
 			}
 		if(((Base) vObjeto).ObtenerVidaZonaPolvorin()==0 ||((Base) vObjeto).ObtenerVidaZonaDespegue()==0)
 			vRespuesta.addProperty("destruida", true);
+		else if(vTipoDisparo.equals("bomba"))
+			vRespuesta.addProperty("destruida",true);
 		else
 			vRespuesta.addProperty("destruida", false);
 	}catch(Exception e){	
@@ -798,15 +808,39 @@ public class Fachada {
 }
 
 	public JsonObject TirarBomba(int vIdObjeto){
-	
+
 		JsonObject vRespuesta = new JsonObject();
-		vRespuesta.addProperty("tipo","TiraBomba");
-		Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
-		vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
-		((DronAereo) vObjeto).SetearTieneBomba(false);
-		vRespuesta.addProperty("Bomba",false);
-	
+		try{
+			vRespuesta.addProperty("tipo","TiraBomba");
+			Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
+			vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
+			((DronAereo) vObjeto).SetearTieneBomba(false);
+			vRespuesta.addProperty("Bomba",false);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	return vRespuesta;
-	
 }
+	
+	public JsonObject RecargaBomba(int vIdObjeto){
+
+		JsonObject vRespuesta = new JsonObject();
+		try{
+			vRespuesta.addProperty("tipo","recargaBomba");
+			Objeto vObjeto=vPartida.getObjetos().Find(vIdObjeto);
+			vRespuesta.addProperty("IdDronAereo",vObjeto.ObtenerIdObjeto());
+			((DronAereo) vObjeto).SetearTieneBomba(true);
+			vRespuesta.addProperty("Bomba",true);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	return vRespuesta;
+}
+	
+	public void SalirJuego(){
+		vCantidadJugadoresAbandono++;
+		if(vCantidadJugadoresAbandono== vCantJugadoresPartidaActual)
+				ResetearDatos();
+	}
+	
 }

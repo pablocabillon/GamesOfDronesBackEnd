@@ -128,7 +128,7 @@ public class WebSocket {
 		
 		
 		case "\"disparoBase\"":
-				vRespuesta=vFachada.DisparaBase(jelement.getAsJsonObject().get("IdBase").getAsInt(), jelement.getAsJsonObject().get("sector").toString());
+				vRespuesta=vFachada.DisparaBase(jelement.getAsJsonObject().get("IdBase").getAsInt(), jelement.getAsJsonObject().get("sector").toString(),jelement.getAsJsonObject().get("tipoDisparo").toString(),jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 				synchronized(conexiones){
 				for(Session client : conexiones){
 			            client.getBasicRemote().sendText(vRespuesta.toString());
@@ -154,12 +154,24 @@ public class WebSocket {
 					}    
 				   }
 			break;
-			
-		case "\"TiraBomba\"":
+		case "\"salirJuego\"":
+				vFachada.SalirJuego();
+		break;
+		case "\"tiraBomba\"":
 			vRespuesta=vFachada.TirarBomba(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
 			synchronized(conexiones){
 				for(Session client : conexiones){
 					if (!client.equals(sesion)){
+			            client.getBasicRemote().sendText(vRespuesta.toString());
+			        }
+				}    
+			   }
+			break;
+		case "\"recargaBomba\"":
+			vRespuesta=vFachada.RecargaBomba(jelement.getAsJsonObject().get("IdDronAereo").getAsInt());
+			synchronized(conexiones){
+				for(Session client : conexiones){
+					if (client.equals(sesion)){
 			            client.getBasicRemote().sendText(vRespuesta.toString());
 			        }
 				}    
